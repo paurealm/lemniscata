@@ -3,7 +3,7 @@ name: Deploy lemniscata.net
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
@@ -11,18 +11,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Add SSH private key to agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.LEMNISCLOUD_DEPLOY_KEY }}  
+        uses: actions/checkout@v3
 
-      - name: Deploy to Server
-        env:
-          SERVER_USER: redstone
-          SERVER_IP: ${{ secrets.LEMNISCLOUD_HOST }}
-          APP_DIR: ${{ secrets.LEMNISCLOUD_WEB_ROOT }}
-        run: |
-          mkdir /home/redstone/uwuuwu
-          "
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.LEMNISCLOUD_HOST }}
+          username: 'redstone'
+          key: ${{ secrets.LEMNISCLOUD_DEPLOY_KEY }}
+          port: 22
+          script: |
+            cd /var/www/lemniscata
+            git reset --hard
+            git pull origin main
