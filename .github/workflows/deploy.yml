@@ -1,4 +1,4 @@
-name: Deploy to lemniscata.net
+name: Deploy lemniscata.net
 
 on:
   push:
@@ -11,16 +11,23 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy files to server
-        uses: appleboy/ssh-action@v1.2.0
+        uses: actions/checkout@v2
+        
+      - name: Add SSH private key to agent
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          host: lemniscata.net
-          username: redstone
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            mkdir -p /var/www/lemniscata
-            rm -rf /var/www/lemniscata/*
-            mkdir -p /var/www/lemniscata
-            cp -r * /var/www/lemniscata
+          ssh-private-key: ${{ secrets.LEMNISCLOUD_DEPLOY_KEY }}
+
+      - name: Deploy to Server
+        env:
+          SERVER_USER: redstone
+          SERVER_IP: ${{ secrets.LEMNISCLOUD_HOST }}
+          APP_DIR: ${{ secrets.LEMNISCLOUD_WEB_ROOT }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "
+          cd $APP_DIR &&
+          git remote set-url origin git@github.com:paurealm/lemniscata.git &&  # Dont forget to change this!!!
+          git pull origin main &&
+          npm install &&
+          npm run build
+          "
