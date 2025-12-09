@@ -26,8 +26,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "
           cd $APP_DIR &&
-          git remote set-url origin git@github.com:paurealm/lemniscata.git &&  # Dont forget to change this!!!
-          git pull origin main &&
-          npm install &&
-          npm run build
+          git remote set-url origin git@github.com:paurealm/lemniscata.git &&
+          git pull origin main
           "
