@@ -21,6 +21,6 @@ jobs:
           key: ${{ secrets.LEMNISCLOUD_DEPLOY_KEY }}
           port: 22
           script: |
-            cd /var/www/lemniscata
+            cd /var/www/lemniscata/
             git reset --hard
             git pull origin main
