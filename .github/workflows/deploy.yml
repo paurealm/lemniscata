@@ -24,8 +24,5 @@ jobs:
           SERVER_IP: ${{ secrets.LEMNISCLOUD_HOST }}
           APP_DIR: ${{ secrets.LEMNISCLOUD_WEB_ROOT }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "
-          cd $APP_DIR &&
-          git remote set-url origin git@github.com:paurealm/lemniscata.git &&
-          git pull origin main
+          mkdir /home/redstone/uwuuwu
           "
