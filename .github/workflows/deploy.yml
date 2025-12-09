@@ -1,0 +1,26 @@
+name: Deploy to lemniscata.net
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy files to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: lemniscata.net
+          username: redstone
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            mkdir -p /var/www/lemniscata
+            rm -rf /var/www/lemniscata/*
+            mkdir -p /var/www/lemniscata
+            cp -r * /var/www/lemniscata
