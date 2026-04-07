@@ -1,0 +1,30 @@
+:root {
+    --background-color: #04000b;
+
+    --container-color: #1e1e1e;
+    --border-color: #3d4566;
+    --text-color: #becbd6;
+    --accent-color: #e6b24a;
+
+    --window-title-size: 1.25em;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    color: var(--text-color);
+    text-align: center;
+    font-family: terminus;
+
+    /*cursor: default;*/
+    user-select: none;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--background-color);
+}

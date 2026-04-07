@@ -1,0 +1,24 @@
+* {
+    text-align: left;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.ad-container {}
+
+#contact-links {
+    background-color: var(--border-color);
+    padding: 20px;
+}
+
+.contact-link {
+    margin-top: 20px;
+}
+
+.contact-link > img {
+    max-width: 20%;
+}
+
+.contact-link > span {
+    font-size: 2em;
+}

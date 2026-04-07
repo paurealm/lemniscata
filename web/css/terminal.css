@@ -1,0 +1,72 @@
+:root {
+    --terminal-text-color: var(--text-color);
+    --terminal-text-selected-color: #3e0000;
+
+}
+
+#terminal-wrapper {
+    background-color: rgb(102, 67, 74);
+    position: relative;
+    height: 100%;
+}
+
+#terminal-wrapper > img {
+    width: 100%;
+}
+
+#terminal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 40%;
+    max-height: 60%;
+
+    transform: translate(-50%, -50%);
+
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+#terminal-content::-webkit-scrollbar {
+    display: none;
+}
+
+#terminal-content > h3 {
+    font-size: 1.6vw;
+}
+
+#terminal-content > p {
+    font-size: 1vw;
+
+    color: var(--terminal-text-color);
+}
+
+#terminal-content > p.selected {
+    font-size: 1vw;
+
+    color: var(--terminal-text-selected-color)
+}
+
+@keyframes text-cursor {
+    from{caret-color: transparent;}
+    to{opacity: var(--terminal-text-color);}
+}
+
+.terminal-text {
+    margin-bottom: 0.6vw;
+}
+
+.terminal-input {
+    caret-shape: underscore;
+
+    white-space: "pre-wrap";
+}
+
+.terminal-input:focus {
+    outline: 0px solid transparent;
+}
+
+::selection {
+    background-color: #957500;
+}
