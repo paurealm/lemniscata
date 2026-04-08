@@ -140,3 +140,34 @@
     opacity: 0%;
     animation: 600ms steps(1, jump-end) 1s infinite alternate bios-text;
 }
+
+.terminal-carrousel-container {
+    background-color: #503f00;
+    height: 6vw;
+    width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2vw;
+
+    position: relative;
+}
+
+.terminal-carrousel-container > p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    /*transform: translate(-50%, calc(-50% + -50%));*/
+    transition: transform opacity ease-out 500ms;
+
+    font-size: 1vw;
+}
+
+.selected-carrousel-option:before {
+    content: "▶ ";
+}
+
+.selected-carrousel-option:after {
+    content: " ◀";
+}

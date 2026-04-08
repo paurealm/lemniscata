@@ -1,9 +1,19 @@
 let selectedButton = -1;
 let buttonsToSelect = 0;
 
+let carrouselItems = 0;
+let currentCarrouselOption = 0;
+
 let savedInputText = null;
 
 let menuStack = []
+
+let libraryOptions = [
+    "pepe luis",
+    "la ramona",
+    "J.C. bodoque",
+    "pedro sánchez"
+]
 
 const COLORS = {
     PURPLE:    0,
@@ -62,7 +72,8 @@ const handleSendMessage = () => {
 }
 
 const handleDecode = () => {
-
+    playSound(SFX.BUTTON_PRESS)
+    addMenuToStack(LIBRARY_MENU)
 }
 
 const handleExit = () => {
@@ -73,29 +84,42 @@ const handleExit = () => {
 const handleKeyDownEvent = (event) => {
     //console.log(event)
 
-    if (event.key == "ArrowDown" && buttonsToSelect > 0) {
-        if (selectedButton >= buttonsToSelect) {
-            selectedButton = 0;
-        } else {
-            selectedButton++
+    if (event.key == "ArrowDown") {
+
+        if (buttonsToSelect > 0) {
+            if (selectedButton >= buttonsToSelect) {
+                selectedButton = 0;
+            } else {
+                selectedButton++
+            }
+            playSound(SFX.BUTTON_SELECT)
+            refreshTerminal(true);
+        } else if (currentCarrouselOption < (carrouselItems - 1)) {
+            currentCarrouselOption ++;
+            refreshCarrousel();
         }
-        playSound(SFX.BUTTON_SELECT)
-        refreshTerminal(true);
-    } else if (event.key == "ArrowUp" && buttonsToSelect > 0) {
-        if (selectedButton <= -1) {
-            selectedButton = buttonsToSelect - 1;
-        } else {
-            selectedButton--
+        
+    } else if (event.key == "ArrowUp") {
+
+        if (buttonsToSelect > 0) {
+            if (selectedButton <= -1) {
+                selectedButton = buttonsToSelect - 1;
+            } else {
+                selectedButton--
+            }
+            playSound(SFX.BUTTON_SELECT)
+            refreshTerminal(true);
+        } else if (currentCarrouselOption > 0) {
+            currentCarrouselOption --;
+            refreshCarrousel();
         }
-        playSound(SFX.BUTTON_SELECT)
-        refreshTerminal(true);
+        
     } else if (event.key == "Enter" && !event.shiftKey) {
         const onEnter = menuStack[menuStack.length - 1].onEnter;
         if (onEnter) {
             onEnter();
         }
     } else if (event.key == "Escape" || ((event.key == "Q" || event.key == "q") && event.ctrlKey)) {
-        console.log("control q", menuStack[menuStack.length - 1])
         const onBack = menuStack[menuStack.length - 1].onBack;
         if (onBack) {
             onBack();
@@ -306,6 +330,33 @@ const SEND_MESSAGE_MENU = {
     }
 }
 
+const LIBRARY_MENU = {
+    id: "library",
+    elements: [
+        {
+            id: "title",
+            type: "title",
+            text: "Biblioteca encriptada"
+        },
+        {
+            id: "description",
+            type: "text",
+            text: "Escritos para esas personitas especiales que me han hecho ser como soy hoy"
+        },
+        {
+            id: "guide",
+            type: "text",
+            text: "Busca tu nombre y resuelve la clave en la siguiente pantalla para desencriptar tu carta :)"
+        },
+        {
+            id: "selector",
+            type: "carrousel",
+            getOptions: () => libraryOptions
+        }
+    ],
+    onShow: () => setWallpaperColor(COLORS.RED)
+}
+
 const renderTitle = (terminal, element) => {
     const titleElement = document.createElement("h3");
     titleElement.innerHTML = element.text;
@@ -363,6 +414,65 @@ const renderBios = (terminal, element) => {
     terminal.appendChild(biosElement);
 }
 
+const renderCarrousel = (terminal, element) => {
+    const options = element.getOptions();
+
+    const carrouselContainer = document.createElement("div")
+    carrouselContainer.id = "terminal-carrousel-container"
+    carrouselContainer.className = "terminal-carrousel-container"
+
+    for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+        const place = i - currentCarrouselOption;
+
+        const optionElement = document.createElement("p");
+        optionElement.innerHTML = option
+
+        carrouselContainer.appendChild(optionElement);
+    }
+
+    terminal.appendChild(carrouselContainer)
+    refreshCarrousel()
+
+}
+
+const refreshCarrousel = () => {
+    const container = document.getElementById("terminal-carrousel-container");
+    if (!container) return;
+
+    for (let i = 0; i < container.children.length; i++) {
+        const optionElement = container.children[i];
+        const place = i - currentCarrouselOption;
+
+        const transform = `translate(-50%, calc(-50% + ${place * 150}%)) scale(${1 - (Math.abs(place) * 0.1)})`
+        optionElement.style.transform = transform;
+        optionElement.style.opacity = "100%";
+        optionElement.style.maskImage = "";
+        optionElement.classList.remove("selected-carrousel-option")
+        
+        switch (place) {
+            case -2:
+                optionElement.style.maskImage = "linear-gradient(0deg, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0) 60%)";
+                break;
+            case -1:
+                optionElement.style.maskImage = "linear-gradient(0deg, rgba(0,0,0,1) 10%, rgba(0,0,0,.8) 30%, rgba(0,0,0,.6) 40%, rgba(0,0,0,0) 100%)";
+                break;
+            case 0:
+                optionElement.classList.add("selected-carrousel-option")
+                break;
+            case 1:
+                optionElement.style.maskImage = "linear-gradient(180deg, rgba(0,0,0,1) 10%, rgba(0,0,0,.8) 30%, rgba(0,0,0,.6) 40%, rgba(0,0,0,0) 100%)"
+                break;
+            case 2:
+                optionElement.style.maskImage = "linear-gradient(180deg, rgba(0,0,0,0.6) 20%, rgba(0,0,0,0) 60%)";
+                break;
+            default:
+                optionElement.style.opacity = "0%"
+                break;
+        }
+    }
+}
+
 const refreshTerminal = (keepSelectedButton) => {
     const terminal = document.getElementById("terminal-content");
     terminal.innerHTML = ''
@@ -371,6 +481,7 @@ const refreshTerminal = (keepSelectedButton) => {
         selectedButton = -1;
     } 
     buttonsToSelect = 0;
+    carrouselItems = 0;
 
     if (menuStack.length > 0) {
         const menu = menuStack[menuStack.length - 1];
@@ -395,6 +506,10 @@ const refreshTerminal = (keepSelectedButton) => {
                     break;
                 case "bios":
                     renderBios(terminal, element);
+                    break;
+                case "carrousel":
+                    renderCarrousel(terminal, element);
+                    carrouselItems = element.getOptions().length;
                     break;
             }
         }
@@ -448,6 +563,15 @@ const setUpTerminal = () => {
 
     addMenuToStack(null);
     addMenuToStack(TERMINAL_OFF_SCREEN);
+    //addMenuToStack(LIBRARY_MENU)
+
+    fetch("https://webapi.lemniscata.net/decrypt", {
+        method: "GET",
+        redirect: "follow"
+    }).then(() => {
+        console.log(response)
+        libraryOptions = response.body.keys;
+    }).catch(error => console.log(error))
 
     console.log("Terminal started !!")
 }
