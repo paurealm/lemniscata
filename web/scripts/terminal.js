@@ -568,10 +568,8 @@ const setUpTerminal = () => {
     fetch("https://webapi.lemniscata.net/decrypt", {
         method: "GET",
         redirect: "follow"
-    }).then(response => {
-        console.log(response)
-        libraryOptions = response.body.keys;
-    }).catch(error => console.log(error))
+    }).then(response => response.json()).then(data => console.log(data))
+    .catch(error => console.log(error))
 
     console.log("Terminal started !!")
 }
