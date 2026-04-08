@@ -22,7 +22,7 @@ const processMessage = async (message) => {
     await transporter.sendMail({
         from: `"Páramos de Lemniscata" <${process.env.LEMNISCATA_API_MAIL_USERNAME}>`, // sender address
         to: "paurealm@lemniscata.net", // list of recipients
-        subject: "[Lemniscata] Has recibido un mensaje nuevo", // subject line
+        subject: "[Lemniscata] Has recibido un mensaje nuevo :3", // subject line
         text: "Te han dejado un nuevo mensaje", // plain text body
         html: `<p><strong>Te han dejado un nuevo mensaje en los Páramos de Lemniscata:</strong><p><p>${message}</p>`, // HTML body
     });
