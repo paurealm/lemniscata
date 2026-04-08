@@ -25,11 +25,20 @@ const SFX = {
     SEND_MESSAGE_SUCCESS: "send_message_success.wav",
 }
 
-const playSound = (sound) => {
+const createAudio = (sound) => {
     const path = `./resources/media/terminal/sfx/${sound}`;
-    const audio = new Audio(path);
-    audio.volume = sound == SFX.INPUT_KEY ? 0.1 : 0.3;
-    audio.play()
+    return new Audio(path);
+}
+
+const playSound = (sound, volume) => {
+    const audio = createAudio(sound);
+    
+    if (volume) {
+        audio.volume = volume
+    } else {
+        audio.volume = sound == SFX.INPUT_KEY ? 0.1 : 0.3;
+        audio.play()
+    }
 }
 
 const handleSendMessage = () => {
@@ -328,4 +337,12 @@ const setUpTerminal = () => {
     console.log("Terminal started !!")
 }
 
+const preloadSounds = () => {
+    for (const [key, value] of Object.entries(SFX)) {
+        const audio = createAudio(value);
+        audio.load()
+    }
+}
+
 setUpTerminal();
+preloadSounds();
