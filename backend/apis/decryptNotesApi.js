@@ -40,8 +40,13 @@ const getIdList = () => {
     return notes.map(note => note.id)
 }
 
+const getHintList = () => {
+    return notes.map(note => note.hint)
+}
+
 module.exports = {
     setupApi,
     decrypt,
-    getIdList
+    getIdList,
+    getHintList
 }

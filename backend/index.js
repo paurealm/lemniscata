@@ -19,8 +19,11 @@ app.post('/send_message', async (req, res) => {
     res.sendStatus(200)
 })
 
-app.get('/decrypt', (req, res) => {
-    res.send({keys: decryptNotesApi.getIdList()})
+app.get('/decrypt_list', (req, res) => {
+    res.send({
+        keys: decryptNotesApi.getIdList(),
+        hints: decryptNotesApi.getHintList()
+    })
 })
 
 app.post('/decrypt', (req, res) => {
