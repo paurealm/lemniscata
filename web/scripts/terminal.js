@@ -403,93 +403,96 @@ const LIBRARY_MENU = {
                 if (inputText.length > 0) {
                     playSound(SFX.SEND_MESSAGE_CONFIRMED)
 
-                    fetch("https://webapi.lemniscata.net/decrypt", {
-                        method: "POST",
-                        headers: {
-                            "Content-type": "application/json; charset=UTF-8"
-                        },
-                        body: JSON.stringify({
-                            "id": selectedKey,
-                            "key": inputText
-                        }),
-                    })
-                    .then(response => response.json)
-                    .then(data => {
-                        const decryptedMessage = data.result
-                        if (decryptedMessage && decryptedMessage != null) {
-                            playSound(SFX.SEND_MESSAGE_SUCCESS)
-                            addMenuToStack({
-                                id: "decryption_success",
-                                elements: [
-                                    {
-                                        id: "success",
-                                        type: "text",
-                                        text: `Mensaje desencriptado para ${selectedKey}:`
-                                    },
-                                    {
-                                        id: "message",
-                                        type: "text",
-                                        text: decryptedMessage
-                                    }
-                                ],
-                                onEnter: () => {
-                                    playSound(SFX.BUTTON_PRESS)
-                                    addMenuToStack(LIBRARY_MENU)
-                                },
-                                onBack: () => {
-                                    playSound(SFX.BUTTON_PRESS)
-                                    addMenuToStack(LIBRARY_MENU)
-                                }
-                            })
-                        } else {
-                            playSound(SFX.SEND_MESSAGE_DECLINE)
-                            addMenuToStack({
-                                id: "decryption_wrong",
-                                elements: [
-                                    {
-                                        id: "wrong_key",
-                                        type: "text",
-                                        text: "Desencriptado fallido. Parece que no era la clave correcta :("
-                                    },
-                                    {
-                                        id: "try_again",
-                                        type: "text",
-                                        text: `Ánimo, si eres ${selectedKey} seguro que la sacas ^^`
-                                    }
-                                ],
-                                onEnter: () => {
-                                    playSound(SFX.BUTTON_PRESS)
-                                    addMenuToStack(LIBRARY_MENU)
-                                },
-                                onBack: () => {
-                                    playSound(SFX.BUTTON_PRESS)
-                                    addMenuToStack(LIBRARY_MENU)
-                                }
-                            })
-                        }
-                    })
-                    .catch(error => {
-                        playSound(SFX.ERROR)
-                        setTimeout(() => {
-                            addMenuToStack(MAIN_MENU)
-                        }, 5000)
-                        addMenuToStack({
-                            id: "decryption_server_error",
-                            elements: [
-                                {
-                                    id: "fail_report",
-                                    type: "text",
-                                    text: "Upsi, parece que algo ha fallado :("
-                                },
-                                {
-                                    id: "ask_for_report",
-                                    type: "text",
-                                    text: "Coméntaselo a Paula, porfi"
-                                }
-                            ],
-                            onBack: () => {}
+                    setTimeout(() => {
+                        fetch("https://webapi.lemniscata.net/decrypt", {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json; charset=UTF-8"
+                            },
+                            body: JSON.stringify({
+                                "id": selectedKey,
+                                "key": inputText
+                            }),
                         })
-                    })
+                        .then(response => response.json)
+                        .then(data => {
+                            const decryptedMessage = data.result
+                            if (decryptedMessage && decryptedMessage != null) {
+                                playSound(SFX.SEND_MESSAGE_SUCCESS)
+                                addMenuToStack({
+                                    id: "decryption_success",
+                                    elements: [
+                                        {
+                                            id: "success",
+                                            type: "text",
+                                            text: `Mensaje desencriptado para ${selectedKey}:`
+                                        },
+                                        {
+                                            id: "message",
+                                            type: "text",
+                                            text: decryptedMessage
+                                        }
+                                    ],
+                                    onEnter: () => {
+                                        playSound(SFX.BUTTON_PRESS)
+                                        addMenuToStack(LIBRARY_MENU)
+                                    },
+                                    onBack: () => {
+                                        playSound(SFX.BUTTON_PRESS)
+                                        addMenuToStack(LIBRARY_MENU)
+                                    }
+                                })
+                            } else {
+                                playSound(SFX.SEND_MESSAGE_DECLINE)
+                                addMenuToStack({
+                                    id: "decryption_wrong",
+                                    elements: [
+                                        {
+                                            id: "wrong_key",
+                                            type: "text",
+                                            text: "Desencriptado fallido. Parece que no era la clave correcta :("
+                                        },
+                                        {
+                                            id: "try_again",
+                                            type: "text",
+                                            text: `Ánimo, si eres ${selectedKey} seguro que la sacas ^^`
+                                        }
+                                    ],
+                                    onEnter: () => {
+                                        playSound(SFX.BUTTON_PRESS)
+                                        addMenuToStack(LIBRARY_MENU)
+                                    },
+                                    onBack: () => {
+                                        playSound(SFX.BUTTON_PRESS)
+                                        addMenuToStack(LIBRARY_MENU)
+                                    }
+                                })
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            playSound(SFX.ERROR)
+                            setTimeout(() => {
+                                addMenuToStack(MAIN_MENU)
+                            }, 5000)
+                            addMenuToStack({
+                                id: "decryption_server_error",
+                                elements: [
+                                    {
+                                        id: "fail_report",
+                                        type: "text",
+                                        text: "Upsi, parece que algo ha fallado :("
+                                    },
+                                    {
+                                        id: "ask_for_report",
+                                        type: "text",
+                                        text: "Coméntaselo a Paula, porfi"
+                                    }
+                                ],
+                                onBack: () => {}
+                            })
+                        })
+                    }, 3000)
 
                     addMenuToStack({
                         id: "sending_message",
