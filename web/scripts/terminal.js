@@ -414,7 +414,7 @@ const LIBRARY_MENU = {
                                 "key": inputText
                             }),
                         })
-                        .then(response => response.json)
+                        .then(response => response.json())
                         .then(data => {
                             const decryptedMessage = data.result
                             if (decryptedMessage && decryptedMessage != null) {
