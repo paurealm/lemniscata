@@ -5,10 +5,24 @@ let savedInputText = null;
 
 let menuStack = []
 
+const COLORS = {
+    PURPLE:    0,
+    RED:      60,
+    ORANGE:  110,
+    GREEN:   170,
+    CYAN:   -110,
+    BLUE:   - 60
+}
+
+const setWallpaperColor = (color, brightness) => {
+    const cover = document.getElementById("terminal-cover");
+    cover.style.backdropFilter = `hue-rotate(${color}deg) brightness(${brightness ?? "100"}%)`
+}
+
 const SFX = {
     TERMINAL_START: "terminal_start.wav",
     TERMINAL_STARTUP: "terminal_startup.wav",
-    TERMINAL_SHUTDOWN: "",
+    TERMINAL_SHUTDOWN: "terminal_shutdown.wav",
 
     BUTTON_SELECT: "button_select.wav",
     BUTTON_PRESS: "button_press.wav",
@@ -21,6 +35,7 @@ const SFX = {
     INPUT_KEY: "input_key.wav",
 
     SEND_MESSAGE_CONFIRMATION: "send_message_confirmation.wav",
+    SEND_MESSAGE_DECLINE: "send_message_decline.wav",
     SEND_MESSAGE_CONFIRMED: "send_message_confirmed.wav",
     SEND_MESSAGE_SUCCESS: "send_message_success.wav",
 }
@@ -51,11 +66,12 @@ const handleDecode = () => {
 }
 
 const handleExit = () => {
-
+    playSound(SFX.TERMINAL_SHUTDOWN)
+    addMenuToStack(TERMINAL_SHUTING_DOWN_SCREEN)
 }
 
 const handleKeyDownEvent = (event) => {
-    const inputField = document.getElementById("terminal-input");
+    //console.log(event)
 
     if (event.key == "ArrowDown" && buttonsToSelect > 0) {
         if (selectedButton >= buttonsToSelect) {
@@ -73,12 +89,12 @@ const handleKeyDownEvent = (event) => {
         }
         playSound(SFX.BUTTON_SELECT)
         refreshTerminal(true);
-    } else if (event.key == "Enter") {
+    } else if (event.key == "Enter" && !event.shiftKey) {
         const onEnter = menuStack[menuStack.length - 1].onEnter;
         if (onEnter) {
             onEnter();
         }
-    } else if ((event.key == "Q" || event.key == "q") && event.ctrlKey) {
+    } else if (event.key == "Escape" || ((event.key == "Q" || event.key == "q") && event.ctrlKey)) {
         console.log("control q", menuStack[menuStack.length - 1])
         const onBack = menuStack[menuStack.length - 1].onBack;
         if (onBack) {
@@ -96,6 +112,45 @@ const pressCurrentButton = () => {
         }
     } else {
 
+    }
+}
+
+const TERMINAL_OFF_SCREEN = {
+    id: "idle",
+    elements: [
+        {
+            id: "bios",
+            type: "bios",
+            text: "INSERTAR DISCO"
+        }
+    ],
+    onEnter: () => {
+        playSound(SFX.TERMINAL_START)
+        setTimeout(() => {
+            playSound(SFX.TERMINAL_STARTUP);
+            addMenuToStack(MAIN_MENU)
+        }, 3000)
+        addMenuToStack({
+            id: "starting",
+            elements: [
+                {
+                    id: "loader",
+                    type: "loader"
+                }
+            ]
+        })
+    },
+    onShow: () => setWallpaperColor(COLORS.PURPLE, "0")
+}
+
+const TERMINAL_SHUTING_DOWN_SCREEN = {
+    id: "shuting_down",
+    elements: [],
+    onShow: () => {
+        setWallpaperColor(COLORS.PURPLE, 0)
+        setTimeout(() => {
+            addMenuToStack(TERMINAL_OFF_SCREEN)
+        }, 5000)
     }
 }
 
@@ -126,7 +181,8 @@ const MAIN_MENU = {
             action: handleExit
         }
     ],
-    onEnter: () => pressCurrentButton()
+    onEnter: () => pressCurrentButton(),
+    onShow: () => setWallpaperColor(COLORS.PURPLE)
 }
 
 const SEND_MESSAGE_MENU = {
@@ -147,10 +203,12 @@ const SEND_MESSAGE_MENU = {
             type: "input"
         }
     ],
+    onShow: () => setWallpaperColor(COLORS.BLUE),
     onEnter: () => {
-        playSound(SFX.SEND_MESSAGE_CONFIRMATION)
         const inputText = document.getElementById("terminal-input").innerHTML.trim()
         if (inputText.length > 0) {
+            
+            playSound(SFX.SEND_MESSAGE_CONFIRMATION)
             addMenuToStack({
                 id: "confirm_send_message",
                 elements: [
@@ -175,6 +233,22 @@ const SEND_MESSAGE_MENU = {
                         })
                         .then(() => {
                             playSound(SFX.SEND_MESSAGE_SUCCESS)
+                            addMenuToStack({
+                                id: "message_sent",
+                                elements: [
+                                    {
+                                        id: "success",
+                                        type: "text",
+                                        text: "Nota enviada !!"
+                                    },
+                                    {
+                                        id: "thanks",
+                                        type: "text",
+                                        text: "Gracias por tu tiempo, toma un muac :3"
+                                    }
+                                ],
+                                onBack: () => {}
+                            })
                         })
                         .catch(() => {
                             playSound(SFX.ERROR)
@@ -182,12 +256,12 @@ const SEND_MESSAGE_MENU = {
                                 id: "message_sent_and_failed",
                                 elements: [
                                     {
-                                        id: "confirmation_text",
+                                        id: "fail_report",
                                         type: "text",
                                         text: "Upsi, parece que algo ha fallado :("
                                     },
                                     {
-                                        id: "confirmation_text",
+                                        id: "ask_for_report",
                                         type: "text",
                                         text: "Coméntaselo a Paula, porfi"
                                     }
@@ -203,12 +277,16 @@ const SEND_MESSAGE_MENU = {
                     }, 1000)
 
                     addMenuToStack({
-                        id: "message_sent",
+                        id: "sending_message",
                         elements: [
+                            {
+                                id: "loader",
+                                type: "loader"
+                            },
                             {
                                 id: "confirmation_text",
                                 type: "text",
-                                text: "Gracias por dejar un mensaje :3"
+                                text: "Enviando mensaje"
                             }
                         ],
                         onBack: () => {}
@@ -216,6 +294,7 @@ const SEND_MESSAGE_MENU = {
                 },
                 onBack: () => {
                     savedInputText = inputText
+                    playSound(SFX.SEND_MESSAGE_DECLINE)
                     popLastMenu();
                 }
             })
@@ -258,13 +337,30 @@ const renderInput = (terminal, element) => {
     inputElement.contentEditable = "plaintext-only";
     inputElement.spellcheck = false;
 
-    inputElement.innerHTML = savedInputText && savedInputText.length > 0 ? savedInputText : ""
+    if (savedInputText && savedInputText.length > 0) {
+        inputElement.innerHTML = savedInputText
+    }
     savedInputText = null;
 
     terminal.appendChild(inputElement);
     inputElement.focus()
 
     inputElement.addEventListener("input", (event) => playSound(SFX.INPUT_KEY))
+}
+
+const renderLoader = (terminal, element) => {
+    const loaderElement = document.createElement("p");
+    loaderElement.className = "terminal-loader";
+
+    terminal.appendChild(loaderElement)
+}
+
+const renderBios = (terminal, element) => {
+    const biosElement = document.createElement("p");
+    biosElement.innerHTML = element.text;
+    biosElement.className = "terminal-bios"
+
+    terminal.appendChild(biosElement);
 }
 
 const refreshTerminal = (keepSelectedButton) => {
@@ -294,9 +390,18 @@ const refreshTerminal = (keepSelectedButton) => {
                 case "input":
                     renderInput(terminal, element);
                     break;
+                case "loader":
+                    renderLoader(terminal, element);
+                    break;
+                case "bios":
+                    renderBios(terminal, element);
+                    break;
             }
         }
 
+        if (menu.onShow) {
+            menu.onShow()
+        }
 
     }
 }
@@ -329,11 +434,21 @@ const popLastMenu = () => {
 }
 
 const setUpTerminal = () => {
-
     window.addEventListener("keydown", handleKeyDownEvent)
 
+    const terminal = document.getElementById("terminal-wrapper")
+    terminal.addEventListener("mousedown", (event) => {
+        if (event.button != 0) return;
+
+        const currentScreen = menuStack[menuStack.length - 1]
+        if (currentScreen === TERMINAL_OFF_SCREEN) {
+            currentScreen.onEnter()
+        }
+    })
+
     addMenuToStack(null);
-    addMenuToStack(MAIN_MENU)
+    addMenuToStack(TERMINAL_OFF_SCREEN);
+
     console.log("Terminal started !!")
 }
 

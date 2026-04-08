@@ -17,6 +17,11 @@
     width: 100%;
 }
 
+#terminal-cover {
+    backdrop-filter: brightness(0%);
+    transition: backdrop-filter 1s;
+}
+
 #terminal-content {
     position: absolute;
     top: 50%;
@@ -78,4 +83,60 @@
 
 ::selection {
     background-color: #957500;
+}
+
+@keyframes loader-bullets {
+    0% {
+        content: "𓃉𓃉𓃉";
+    }
+    15% {
+        content: "𓃉𓃉∘";
+    }
+    30% {
+        content: "𓃉∘°";
+    }
+    45% {
+        content: "∘°∘";
+    }
+    60% {
+        content: "°∘𓃉";
+    }
+    75% {
+        content: "∘𓃉𓃉";
+    }
+    90% {
+        content: "𓃉𓃉𓃉";
+    }
+    100% {
+        content: "𓃉𓃉𓃉";
+    }
+}
+
+.terminal-loader:before {
+    content: "uwu";
+    animation: 900ms linear 0s infinite loader-bullets;
+}
+
+@keyframes bios-text {
+    0% {
+        opacity: 100%;
+    }
+    10% {
+        opacity: 100%;
+    }
+    50% {
+        opacity: 0%;
+    }
+    10% {
+        opacity: 90%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+.terminal-bios {
+    font-size: 1.5vw !important;
+    opacity: 0%;
+    animation: 600ms steps(1, jump-end) 1s infinite alternate bios-text;
 }
