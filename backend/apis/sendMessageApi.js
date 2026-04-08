@@ -8,8 +8,8 @@ const setupApi = () => {
         port: 587,
         secure: false,
         auth: {
-            user: "process.env.LEMNISCATA_API_MAIL_USERNAME",
-            pass: "process.env.LEMNISCATA_API_MAIL_PASSWORD",
+            user: process.env.LEMNISCATA_API_MAIL_USERNAME,
+            pass: process.env.LEMNISCATA_API_MAIL_PASSWORD,
         },
         tls: {
             ciphers:'SSLv3'
@@ -20,7 +20,7 @@ const setupApi = () => {
 const processMessage = async (message) => {
     console.log("Enviando mensaje:", message)
     await transporter.sendMail({
-        from: '"Páramos de Lemniscata" <tests@lemniscata.net>', // sender address
+        from: `"Páramos de Lemniscata" <${process.env.LEMNISCATA_API_MAIL_USERNAME}>`, // sender address
         to: "paurealm@lemniscata.net", // list of recipients
         subject: "[Lemniscata] Has recibido un mensaje nuevo", // subject line
         text: "Te han dejado un nuevo mensaje", // plain text body
