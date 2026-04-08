@@ -717,8 +717,8 @@ const setUpTerminal = () => {
     })
 
     addMenuToStack(null);
-    //addMenuToStack(TERMINAL_OFF_SCREEN);
-    addMenuToStack(LIBRARY_MENU)
+    addMenuToStack(TERMINAL_OFF_SCREEN);
+    //addMenuToStack(LIBRARY_MENU)
 
     fetch("https://webapi.lemniscata.net/decrypt_list", {
         method: "GET",
