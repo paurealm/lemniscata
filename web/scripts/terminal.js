@@ -737,6 +737,9 @@ const setUpTerminal = () => {
     })
     .catch(error => console.log(error))
 
+    // esto es una guarrada btw
+    terminal.style.maskImage = "linear-gradient(180deg, rgba(0,0,0,1) 96%, rgba(0,0,0,0) 100%)"
+
     console.log("Terminal started !!")
 }
 

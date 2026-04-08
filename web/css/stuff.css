@@ -1,0 +1,23 @@
+* {
+    text-align: left;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+#widgets {
+    background-color: var(--border-color);
+    padding: 20px;
+}
+
+img {
+    width: 100%;
+}
+
+.widget-title {
+    text-align: center;
+    font-size: 2em;
+}
+
+#widgets:nth-child(1) {
+    transform: rotateZ(20deg);
+}

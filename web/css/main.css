@@ -19,6 +19,8 @@
 
     /*cursor: default;*/
     user-select: none;
+
+    font-size: 1.03em;
 }
 
 html, body {
@@ -27,4 +29,8 @@ html, body {
 
 body {
     background-color: var(--background-color);
+}
+
+iframe {
+    border: 0px;
 }

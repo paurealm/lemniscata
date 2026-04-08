@@ -2,3 +2,8 @@
     font-family: terminus;
     src: url("../resources/font/terminus.ttf");
 }
+
+@font-face {
+    font-family: comfortaa;
+    src: url("../resources/font/comfortaa.ttf");
+}
