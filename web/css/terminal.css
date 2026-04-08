@@ -1,11 +1,14 @@
 :root {
     --terminal-text-color: var(--text-color);
-    --terminal-text-selected-color: #3e0000;
+    --terminal-text-selected-color: #ffc800;
 
 }
 
 #terminal-wrapper {
-    background-color: rgb(102, 67, 74);
+    /*background-color: rgb(102, 67, 74);*/
+    background-image: url(../resources/media/terminal/wallpaper.gif);
+    background-size: cover;
+    image-rendering: pixelated;
     position: relative;
     height: 100%;
 }
@@ -42,10 +45,16 @@
     color: var(--terminal-text-color);
 }
 
+.terminal-button {
+    text-decoration: underline dashed;
+}
+
 #terminal-content > p.selected {
     font-size: 1vw;
 
-    color: var(--terminal-text-selected-color)
+    color: var(--terminal-text-selected-color);
+    transform: scale(1.05);
+    text-decoration: underline;
 }
 
 @keyframes text-cursor {

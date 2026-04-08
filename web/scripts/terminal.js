@@ -5,7 +5,35 @@ let savedInputText = null;
 
 let menuStack = []
 
+const SFX = {
+    TERMINAL_START: "terminal_start.wav",
+    TERMINAL_STARTUP: "terminal_startup.wav",
+    TERMINAL_SHUTDOWN: "",
+
+    BUTTON_SELECT: "button_select.wav",
+    BUTTON_PRESS: "button_press.wav",
+
+    BACK_PRESS: "back_press.wav",
+    BACK_BLOCKED_PRESS: "back_blocked_press.wav",
+
+    ERROR: "error.wav",
+
+    INPUT_KEY: "input_key.wav",
+
+    SEND_MESSAGE_CONFIRMATION: "send_message_confirmation.wav",
+    SEND_MESSAGE_CONFIRMED: "send_message_confirmed.wav",
+    SEND_MESSAGE_SUCCESS: "send_message_success.wav",
+}
+
+const playSound = (sound) => {
+    const path = `./resources/media/terminal/sfx/${sound}`;
+    const audio = new Audio(path);
+    audio.volume = sound == SFX.INPUT_KEY ? 0.1 : 0.3;
+    audio.play()
+}
+
 const handleSendMessage = () => {
+    playSound(SFX.BUTTON_PRESS)
     addMenuToStack(SEND_MESSAGE_MENU)
 }
 
@@ -18,11 +46,7 @@ const handleExit = () => {
 }
 
 const handleKeyDownEvent = (event) => {
-    console.log(event)
     const inputField = document.getElementById("terminal-input");
-    if (inputField) {
-        //inputField.focus();
-    }
 
     if (event.key == "ArrowDown" && buttonsToSelect > 0) {
         if (selectedButton >= buttonsToSelect) {
@@ -30,6 +54,7 @@ const handleKeyDownEvent = (event) => {
         } else {
             selectedButton++
         }
+        playSound(SFX.BUTTON_SELECT)
         refreshTerminal(true);
     } else if (event.key == "ArrowUp" && buttonsToSelect > 0) {
         if (selectedButton <= -1) {
@@ -37,6 +62,7 @@ const handleKeyDownEvent = (event) => {
         } else {
             selectedButton--
         }
+        playSound(SFX.BUTTON_SELECT)
         refreshTerminal(true);
     } else if (event.key == "Enter") {
         const onEnter = menuStack[menuStack.length - 1].onEnter;
@@ -113,6 +139,7 @@ const SEND_MESSAGE_MENU = {
         }
     ],
     onEnter: () => {
+        playSound(SFX.SEND_MESSAGE_CONFIRMATION)
         const inputText = document.getElementById("terminal-input").innerHTML.trim()
         if (inputText.length > 0) {
             addMenuToStack({
@@ -125,19 +152,46 @@ const SEND_MESSAGE_MENU = {
                     }
                 ],
                 onEnter: () => {
-                    fetch("https://webapi.lemniscata.net/send_message", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            message: inputText
-                        }),
-                        headers: {
-                            "Content-type": "application/json; charset=UTF-8"
-                        }
-                    }).finally(() => {
-                        setTimeout(() => {
-                            addMenuToStack(MAIN_MENU)
-                        }, 3000)
-                    })
+                    playSound(SFX.SEND_MESSAGE_CONFIRMED)
+                    
+                    setTimeout(() => {
+                        fetch("https://webapi.lemniscata.net/send_message", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                message: inputText
+                            }),
+                            headers: {
+                                "Content-type": "application/json; charset=UTF-8"
+                            }
+                        })
+                        .then(() => {
+                            playSound(SFX.SEND_MESSAGE_SUCCESS)
+                        })
+                        .catch(() => {
+                            playSound(SFX.ERROR)
+                            addMenuToStack({
+                                id: "message_sent_and_failed",
+                                elements: [
+                                    {
+                                        id: "confirmation_text",
+                                        type: "text",
+                                        text: "Upsi, parece que algo ha fallado :("
+                                    },
+                                    {
+                                        id: "confirmation_text",
+                                        type: "text",
+                                        text: "Coméntaselo a Paula, porfi"
+                                    }
+                                ],
+                                onBack: () => {}
+                            })
+                        })
+                        .finally(() => {
+                            setTimeout(() => {
+                                addMenuToStack(MAIN_MENU)
+                            }, 3000)
+                        })
+                    }, 1000)
 
                     addMenuToStack({
                         id: "message_sent",
@@ -159,6 +213,7 @@ const SEND_MESSAGE_MENU = {
         }
     },
     onBack: () => {
+        playSound(SFX.BACK_PRESS)
         popLastMenu()
     }
 }
@@ -183,7 +238,6 @@ const renderButton = (terminal, element, selected) => {
     const buttonElement = document.createElement("p");
     buttonElement.innerHTML = element.text;
     buttonElement.className = "terminal-button" + (selected ? " selected" : "");
-    buttonElement.style = "text-decoration: underline;"
 
     terminal.appendChild(buttonElement);
 }
@@ -200,6 +254,8 @@ const renderInput = (terminal, element) => {
 
     terminal.appendChild(inputElement);
     inputElement.focus()
+
+    inputElement.addEventListener("input", (event) => playSound(SFX.INPUT_KEY))
 }
 
 const refreshTerminal = (keepSelectedButton) => {
