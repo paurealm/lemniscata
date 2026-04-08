@@ -15,6 +15,13 @@ let libraryOptions = [
     "pedro sánchez"
 ]
 
+let libraryHints = [
+    "pepe luis, dónde nos conocimos?",
+    "ramona, eres una persona cualquiera?",
+    "Juan Carlos, cuánto dinero tiene Tulio en euros?",
+    "pedro, para cuándo la ley mordaza"
+]
+
 const COLORS = {
     PURPLE:    0,
     RED:      60,
@@ -48,6 +55,9 @@ const SFX = {
     SEND_MESSAGE_DECLINE: "send_message_decline.wav",
     SEND_MESSAGE_CONFIRMED: "send_message_confirmed.wav",
     SEND_MESSAGE_SUCCESS: "send_message_success.wav",
+
+    CARROUSEL_UP: "carrousel_up.wav",
+    CARROUSEL_DOWN: "carrousel_down.wav"
 }
 
 const createAudio = (sound) => {
@@ -96,6 +106,7 @@ const handleKeyDownEvent = (event) => {
             refreshTerminal(true);
         } else if (currentCarrouselOption < (carrouselItems - 1)) {
             currentCarrouselOption ++;
+            playSound(SFX.CARROUSEL_DOWN)
             refreshCarrousel();
         }
         
@@ -111,6 +122,7 @@ const handleKeyDownEvent = (event) => {
             refreshTerminal(true);
         } else if (currentCarrouselOption > 0) {
             currentCarrouselOption --;
+            playSound(SFX.CARROUSEL_UP)
             refreshCarrousel();
         }
         
@@ -354,7 +366,150 @@ const LIBRARY_MENU = {
             getOptions: () => libraryOptions
         }
     ],
-    onShow: () => setWallpaperColor(COLORS.RED)
+    onShow: () => setWallpaperColor(COLORS.RED),
+    onBack: () => {
+        playSound(SFX.BACK_PRESS)
+        popLastMenu()
+    },
+    onEnter: () => {
+        const selectedKey = libraryOptions[currentCarrouselOption];
+        const selectedHint = libraryHints[currentCarrouselOption]
+
+        playSound(SFX.SEND_MESSAGE_CONFIRMATION)
+        addMenuToStack({
+            id: "library_code",
+            elements: [
+                {
+                    id: "guide",
+                    type: "text",
+                    text: "Escribe la clave"
+                },
+                {
+                    id: "hint",
+                    type: "text",
+                    text: `Pista: ${selectedHint}`
+                },
+                {
+                    id: "input",
+                    type: "input"
+                }
+            ],
+            onBack: () => {
+                playSound(SFX.SEND_MESSAGE_DECLINE)
+                popLastMenu();
+            },
+            onEnter: () => {
+                const inputText = document.getElementById("terminal-input").innerHTML.trim()
+                if (inputText.length > 0) {
+                    playSound(SFX.SEND_MESSAGE_CONFIRMED)
+
+                    fetch("https://webapi.lemniscata.net/decrypt", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        },
+                        body: JSON.stringify({
+                            "id": selectedKey,
+                            "key": inputText
+                        }),
+                    })
+                    .then(response => response.json)
+                    .then(data => {
+                        const decryptedMessage = data.result
+                        if (decryptedMessage && decryptedMessage != null) {
+                            playSound(SFX.SEND_MESSAGE_SUCCESS)
+                            addMenuToStack({
+                                id: "decryption_success",
+                                elements: [
+                                    {
+                                        id: "success",
+                                        type: "text",
+                                        text: `Mensaje desencriptado para ${selectedKey}:`
+                                    },
+                                    {
+                                        id: "message",
+                                        type: "text",
+                                        text: decryptedMessage
+                                    }
+                                ],
+                                onEnter: () => {
+                                    playSound(SFX.BUTTON_PRESS)
+                                    addMenuToStack(LIBRARY_MENU)
+                                },
+                                onBack: () => {
+                                    playSound(SFX.BUTTON_PRESS)
+                                    addMenuToStack(LIBRARY_MENU)
+                                }
+                            })
+                        } else {
+                            playSound(SFX.SEND_MESSAGE_DECLINE)
+                            addMenuToStack({
+                                id: "decryption_wrong",
+                                elements: [
+                                    {
+                                        id: "wrong_key",
+                                        type: "text",
+                                        text: "Desencriptado fallido. Parece que no era la clave correcta :("
+                                    },
+                                    {
+                                        id: "try_again",
+                                        type: "text",
+                                        text: `Ánimo, si eres ${selectedKey} seguro que la sacas ^^`
+                                    }
+                                ],
+                                onEnter: () => {
+                                    playSound(SFX.BUTTON_PRESS)
+                                    addMenuToStack(LIBRARY_MENU)
+                                },
+                                onBack: () => {
+                                    playSound(SFX.BUTTON_PRESS)
+                                    addMenuToStack(LIBRARY_MENU)
+                                }
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        playSound(SFX.ERROR)
+                        setTimeout(() => {
+                            addMenuToStack(MAIN_MENU)
+                        }, 5000)
+                        addMenuToStack({
+                            id: "decryption_server_error",
+                            elements: [
+                                {
+                                    id: "fail_report",
+                                    type: "text",
+                                    text: "Upsi, parece que algo ha fallado :("
+                                },
+                                {
+                                    id: "ask_for_report",
+                                    type: "text",
+                                    text: "Coméntaselo a Paula, porfi"
+                                }
+                            ],
+                            onBack: () => {}
+                        })
+                    })
+
+                    addMenuToStack({
+                        id: "sending_message",
+                        elements: [
+                            {
+                                id: "loader",
+                                type: "loader"
+                            },
+                            {
+                                id: "confirmation_text",
+                                type: "text",
+                                text: `Desencriptando mensaje de ${selectedKey}`
+                            }
+                        ],
+                        onBack: () => {}
+                    })
+                }
+            }
+        })
+    }
 }
 
 const renderTitle = (terminal, element) => {
@@ -562,13 +717,16 @@ const setUpTerminal = () => {
     })
 
     addMenuToStack(null);
-    addMenuToStack(TERMINAL_OFF_SCREEN);
-    //addMenuToStack(LIBRARY_MENU)
+    //addMenuToStack(TERMINAL_OFF_SCREEN);
+    addMenuToStack(LIBRARY_MENU)
 
-    fetch("https://webapi.lemniscata.net/decrypt", {
+    fetch("https://webapi.lemniscata.net/decrypt_list", {
         method: "GET",
         redirect: "follow"
-    }).then(response => response.json()).then(data => libraryOptions = data.keys)
+    }).then(response => response.json()).then(data => {
+        libraryOptions = data.keys
+        libraryHints = data.hints
+    })
     .catch(error => console.log(error))
 
     console.log("Terminal started !!")
