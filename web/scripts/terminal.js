@@ -492,7 +492,7 @@ const LIBRARY_MENU = {
                                 onBack: () => {}
                             })
                         })
-                    }, 3000)
+                    }, 1500)
 
                     addMenuToStack({
                         id: "sending_message",
@@ -716,6 +716,11 @@ const setUpTerminal = () => {
         const currentScreen = menuStack[menuStack.length - 1]
         if (currentScreen === TERMINAL_OFF_SCREEN) {
             currentScreen.onEnter()
+        } else {
+            const inputElement = document.getElementById("terminal-input")
+            if (inputElement) {
+                inputElement.focus()
+            }
         }
     })
 
