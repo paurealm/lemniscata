@@ -81,7 +81,7 @@ const MAIN_MENU = {
         {
             id: "notes",
             type: "button",
-            text: "Desencriptar un mensaje",
+            text: "Biblioteca encriptada",
             action: handleDecode
         },
         {
