@@ -1,4 +1,5 @@
 const fs = require('fs');
+const mailUtils = require("../utils/MailUtils")
 
 let notes = []
 
@@ -29,10 +30,26 @@ const decrypt = (id, key) => {
 
     if (matchingNote) {
         if (matchingNote.keys.includes(key.trim().toLowerCase())) {
+            const mailText = `Parece que alguien ha desencriptado el mensaje para ${id} con la clave ${key}`
+            mailUtils.sendEmail({
+                from: `"Páramos de Lemniscata" <${process.env.LEMNISCATA_API_MAIL_USERNAME}>`,
+                to: "paurealm@lemniscata.net",
+                subject: "[Lemniscata] Alguien ha desencriptado un mensaje",
+                text: mailText,
+                html: `<p>${mailText}</p>`, // HTML body
+            })
             return matchingNote.text;
         }
     }
 
+    const mailText = `Alguien ha fallado al desencriptar el mensaje ${id} con la clave ${key}`
+            mailUtils.sendEmail({
+                from: `"Páramos de Lemniscata" <${process.env.LEMNISCATA_API_MAIL_USERNAME}>`,
+                to: "paurealm@lemniscata.net",
+                subject: "[Lemniscata] Alguien ha fallado al desencriptar un mensaje",
+                text: mailText,
+                html: `<p>${mailText}</p>`, // HTML body
+            })
     return null;
 }
 

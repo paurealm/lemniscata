@@ -6,6 +6,7 @@ dotenv.config();
 
 const sendMessageApi = require('./apis/sendMessageApi')
 const decryptNotesApi = require('./apis/decryptNotesApi')
+const mailUtils = require("./utils/MailUtils")
 
 app.use(express.json())
 
@@ -31,7 +32,7 @@ app.post('/decrypt', (req, res) => {
 })
 
 app.listen(port, () => {
-    sendMessageApi.setupApi()
+    mailUtils.setupMailer()
     decryptNotesApi.setupApi()
     console.log(`Example app listening on port ${port}`)
 })
