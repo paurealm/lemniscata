@@ -4,10 +4,13 @@
 
     margin-left: auto;
     margin-right: auto;
-    margin-top: 3%;
+    margin-top: 2vw;
+    margin-bottom: 50px;
 
     /**/
     /*border: 1px solid purple;*/
+
+    overflow: visible;
 
 }
 
