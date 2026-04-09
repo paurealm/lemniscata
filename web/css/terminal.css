@@ -182,3 +182,12 @@
 .selected-carrousel-option:after {
     content: " ◀";
 }
+
+#user-guide > span {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#user-guide > span > b {
+    color: #00d0ff;
+    text-shadow: #00aaff 1px 0 10px;
+}
