@@ -17,7 +17,3 @@ img {
     text-align: center;
     font-size: 2em;
 }
-
-#widgets:nth-child(1) {
-    transform: rotateZ(20deg);
-}

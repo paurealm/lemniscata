@@ -16,6 +16,8 @@
     flex: 1 1 325px;
 
     padding: 10px;
+
+    background-color: rgba(4, 0, 11, 0.8);
 }
 
 .content-window:hover {

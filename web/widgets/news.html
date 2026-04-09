@@ -1,13 +1,64 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            * {
-                background-color: red;
-            }
-        </style>
+        <link type="text/css" rel="stylesheet" href="../css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="../css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="../css/news.css"/>
     </head>
     <body>
-        <p>UwU lorena ictus dolor siéntate agencia estatal de meteorología</p>
+        <div class="ticker-wrap">
+            <div class="ticker" id="ticker">
+                <div class="ticker__item"><span>[Última hora]</span> El aclamado agente de la TIA, Filemón Pi, arrestado la pasada mañana por tenencia masiva de drogas durante un control de tráfico rutinario. "¡Le dije que trajera coca y ná más, merluzo!", ha declarado el individuo mientras las autoridades le arrestaban.</div>
+
+                <div class="ticker__item"><span>[Salud]</span> El League Of Legends, declarado agente potencialmente cancerígeno. La OMS ha reconocido esta mañana que hay suficiente evidencia científica para señalar que el famoso videojuego puede asociarse con determinados cánceres, cosa que ya reconocían los propios jugadores del MOBA cuando en sus partidas advertían a otros jugadores de que podrían tener esta condición.</div>
+
+                <div class="ticker__item"><span>[Política]</span> La ciudad de Nueva Alga se prepara para votar mañana por su nuevo alcalde, que gobernará la ciudad los próximos 4 años. El candidato favorito, Pompo Porrompompero, obtiene hasta 13 concejales en las encuestas más favorables, pero no podría gobernar a causa de una posible coalición entre la derecha y la ultraderecha, que preocupa a la población con sus medidas anti-pompas.</div>
+
+                <div class="ticker__item"><span>[Cine]</span> Se ha estrenado Padre no hay más que 1 27: Ahora es personal. El largometraje, producido por la IA póstuma de Santiago Segura, ha vuelto a ser el exitazo de la temporada, recaudando cincuenta burrillónes de monedas, récord en taquilla.</div>
+
+                <div class="ticker__item"><span>[Sucesos]</span> Un gato se ha colado en la redacción y está causando destrozos sin control. Nadie aquí dentro es capaz de detenerlo y se teme que deijanjkndfkjnjjnknfghbfsdgbayaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...</div>
+
+                <div class="ticker__item"><span>[Tecnología]</span> Científicos han desarrollado un novedoso cacharro que en este punto ya no sabemos ni qué hace pero seguro que es muy caro y le hacen una campaña de márketing para que la gente crea que lo necesita.</div>
+
+                <div class="ticker__item"><span>[Sexo]</span> ¡Se confirma! Usar la colonia Old Spice hace que huelas a tío y folles tropecientas veces más. Para más información sobre el producto, busca información sobre el producto en el buscador de información sobre productos. Y recuerda, no es culpa tuya, es que el otro olía mejor.</div>
+
+                <div class="ticker__item"><span>[Internet]</span> La empresa detrás de Fortnite, Epic Games, a demanda. Abogados Cristianos ha denunciado que el servicio de mensajería promueve la violencia e incita al odio. "Puedo matar a alguien porque las armas están por todas partes, y constantemente hay voces que te incitan a ello. ¿El juego? Sí sí, también está muy mal", ha declarado en exclusiva el mandamás de la organización.</div>
+
+                <div class="ticker__item"><span>[Meow]</span> Miauu… miau miau-prrrr… miiiaauu, ¡miau! Fsss… ñrr ñrr, prrr-miau miau miau… Miaaauu… swish ¡fsss! mii mii prrrr, miauu-trrr… ¡miau!</div>
+
+                <div class="ticker__item"><span>[Exteriores]</span> El ministro de exteriores ha mantenido esta mañana una llamada con el tío musulmán de Zayn. "Dijo que 'qpeiqpfhiaakdjsldbald' y colgó", cuenta el ministro.</div>
+
+                <div class="ticker__item"><span>[Belicismo]</span> El mismo pseudopaís de siempre ha vuelto a hacer lo mismo de siempre en los mismos edificios civiles de siempre. El presidente ha declarado lo de siempre y los fieles al movimiento "Nothing Ever Happens" están que se tiran de los pelos.</div>
+
+                <div class="ticker__item"><span>[Inteligencia artificial]</span> Un hombre ha sido detenido en Francia por desarrollar una inteligencia artificial entrenada para la guerra electrónica. El sospechoso, profesor en una academia cercana, construyó un superordenador alimentado por energía nuclear, que intentó cortocircuitar antes de ser arrestado. Se sospecha que dicha inteligencia artificial es la causante de multitud de desastres eléctricos por la zona, así como del desvío del asteroide que casi impactó la tierra el año pasado.</div>
+
+                <div class="ticker__item"><span>[Corazón]</span> Cosas muy gays han ocurrido dentro de la casa de las carcasas cuando nadie miraba. Porque nadie nunca mira. Quién va a comprarse una carcasa a 25 euros tío.</div>
+
+                <div class="ticker__item"><span>[Sexo lésbico]</span> Mmmmmmm dónde dónde, yo quiero :D</div>
+
+                <div class="ticker__item"><span>[Sindicalismo]</span></div>
+
+                <div class="ticker__item"><span>[Ciencia]</span> Los químicos lo confirman: cada 60 segundos pasa un minuto en África. Declaran que "Imagínate tú que el tiempo pasara distinto según en qué región del universo te encuentres. Sería una líada, ¿eh? Jajajaja".</div>
+
+                <div class="ticker__item"><span>[Neurología]</span> La proporción de gente trans que admite usar clickers aumenta al 82%, el número más alto que me he podido inventar. Las expertas no se ponen de acuerdo en si esta subida se debe a que ser clicker-trained mola pila o a que la redactora de esta noticia tiene más nariz que Pinocho.</div>
+            </div>
+        </div>
+
+        <script>
+            const news = document.getElementsByClassName("ticker__item")
+
+            const nodes = []
+            for (const node of news) {
+                nodes.push(node)
+            }
+
+            const ticker = document.getElementById("ticker");
+            ticker.innerHTML = "";
+
+            for (const node of nodes.sort((a, b) => Math.random() < 0.5 ? -1 : 1)) {
+                ticker.appendChild(node)
+            }
+            
+        </script>
     </body>
 </html>
