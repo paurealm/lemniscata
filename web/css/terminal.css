@@ -4,6 +4,18 @@
 
 }
 
+* {
+    overflow: hidden;
+}
+
+#center-content {
+    box-shadow: 0px 0px 60px 45px rgba(44, 42, 106, 0.25);
+    border: 4px solid blue;
+    border-image: conic-gradient(from var(--rainbow-border-angle), rgba(0, 183, 255, 0.5), rgba(255, 114, 142, 0.5), rgba(255, 255, 255, 0.5), rgba(255, 114, 142, 0.5), rgba(0, 183, 255, 0.5)) 1;
+
+    animation: 10s rainbow-rotate linear infinite;
+}
+
 #terminal-wrapper {
     /*background-color: rgb(102, 67, 74);*/
     background-image: url(../resources/media/terminal/wallpaper.gif);

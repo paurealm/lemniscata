@@ -2,12 +2,20 @@
     text-align: left;
     vertical-align: middle;
     text-decoration: none;
+    overflow: hidden;
 }
 
-.ad-container {}
+.ad-container {
+    border: 2px solid rgba(32, 32, 32, 0.5);
+    border-top-width: 25px;
+    border-image: conic-gradient(from var(--rainbow-border-angle), rgb(0, 183, 255), #ff728e, #ffffff, #ff728e, #00b7ff) 1;
+    animation: 10s rainbow-rotate linear infinite;
+
+    margin-top: 100px;
+}
 
 #contact-links {
-    background-color: var(--border-color);
+    /*background-color: var(--border-color);*/
     padding: 20px;
 }
 

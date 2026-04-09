@@ -1,3 +1,6 @@
+:root {
+}
+
 * {
     text-align: left;
     vertical-align: middle;
@@ -5,8 +8,7 @@
 }
 
 #widgets {
-    background-color: var(--border-color);
-    padding: 20px;
+    /*background-color: var(--border-color);*/
 }
 
 img {
@@ -17,3 +19,16 @@ img {
     text-align: center;
     font-size: 2em;
 }
+
+.widget-container {
+    margin-bottom: 50px;
+    padding: 20px;
+    padding-top: 0px;
+
+    border: 2px solid rgba(32, 32, 32, 0.5);
+    border-top-width: 25px;
+
+    border-image: conic-gradient(from var(--rainbow-border-angle), red, yellow, lime, aqua, blue, magenta, red) 1;
+    animation: 10s rainbow-rotate linear infinite;
+}
+

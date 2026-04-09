@@ -10,7 +10,11 @@
     </head>
     <body>
         <div id="title-container">
-            <img src="resources/media/logo.gif">
+            <a href="index.html">
+                <div id="title-container">
+                    <img src="resources/media/logo.gif">
+                </div>
+            </a>
         </div>
         <div id="content-container">
             <div id="left-content">
@@ -27,7 +31,7 @@
                     <!-- Paula -->
                     <div class="content-window" onclick="document.location='paula.html'">
                         <span>se busca</span>
-                        <img src="resources/media/paula.png" class="left-content-image">
+                        <img id="image-paula" src="resources/media/paula.png" class="left-content-image">
                         <p>
                             Responde al nombre de Pau. Si le llaman Paula se pone agresiva. Muy mimosa
                             y a veces calculadora.
@@ -51,38 +55,42 @@
                             y se recompensará con una cuantiosa suma. Suma de mimos, por supuesto.
                             Aquí no ganamos para pagar con dinero. Ya quisiera yo que...
                         </p>
+                        <p>
+                            (Psssst, hey. En realidad soy yo, Paula soy yo. La admin de Lemniscata.
+                            Hablar de una misma en tercera persona siempre es raro)
+                        </p>
                     </div>
 
                     <!-- Jueguitos -->
                     <div class="content-window">
-                        <span>exposición de juguetitos</span>
+                        <span>exposición de widgets</span>
                         <p>
                             En los páramos de Lemniscata descansan entidades de lo más variopintas.
                             Muchas ayudan a crecer este oasis espacial dejándonos creaciones
                             artísticas de sus propios mundos.
                         </p>
                         <p>
-                            Desde la dirección hemos decidido poner a disposición del público
+                            Hay a disposición del público
                             una cantidad razonable de ellos a través de una exposición que 
-                            podrás disfrutar siempre que pases por aquí. No podemos decir que
-                            entendamos todos ellos, seguro que algunos tienen hasta secretos
+                            podrás disfrutar siempre que pases por aquí. No se puede decir que
+                            entienda todos ellos, y seguro que algunos tienen hasta secretos
                             muy secretosos que solo quienes sean afines al concepto pueden comprender,
                             pero desde Lemniscata creemos firmemente que la gracia de la expresión
                             artística puede ser a veces ininteligible para ciertos públicos.
                         </p>
                         <p>
-                            Si quieres contribuir a la exposición, puedes crear tu juguete y
-                            enviarlo mediante los métodos de la pestaña de contacto. Y si no,
+                            Si quieres contribuir a la exposición, puedes crear tu widget y
+                            enviármelo. Y si no,
                             entra a cualquiera desde el menú de la derecha y echa un vistazo.
                             Nunca se sabe qué te encontrarás.
                         </p>
-                        <img src="resources/media/arrow.gif" style="max-width: 18%; transform: rotateY(180deg); margin-left: 60%;">
+                        <img src="resources/media/arrow.gif" style="max-width: 18%; transform: rotateY(180deg); margin-left: 60%; border-width: 0;">
                     </div>
 
                     <!-- Fotos -->
                     <div class="content-window" onclick="document.location='museo.html'">
                         <span>museo de luz</span>
-                        <img src="resources/media/nikon.png" class="right-content-image">
+                        <img id="image-photo" src="resources/media/nikon.png" class="right-content-image">
                         <p>
                             ¿Te gustan las fotos? Tenemos unas miniexposiciones en el museo.
                             Puedes pasarte a echar un ojo cuando quieras.
@@ -117,7 +125,7 @@
                             Que lo sea implica que si no comulgas con las bases morales
                             que aquí compartimos deberías abandonar este sitio para siempre.
                         </p>
-                        <img src="resources/media/trans.gif" class="right-content-image">
+                        <img id="image-trans" src="resources/media/trans.gif" class="right-content-image">
                         <p>
                             No exigimos nada que no sea una obviedad, pero recuerda que aquí no
                             tienen cabida actitudes tránsfobas, xenófobas, o que impliquen cualquier
@@ -144,7 +152,7 @@
                             en la roca, la hormiga, otro bichejo muy colaborativo.
                         </p>
                         
-                        <img src="resources/media/earth.png" class="left-content-image">
+                        <img id="image-earth" src="resources/media/earth.png" class="left-content-image">
 
                         <p>
                             El planeta, además, cuenta con un satélite rocoso. Probablemente surgió

@@ -97,6 +97,7 @@ const handleKeyDownEvent = (event) => {
     if (event.key == "ArrowDown") {
 
         if (buttonsToSelect > 0) {
+            event.preventDefault()
             if (selectedButton >= buttonsToSelect) {
                 selectedButton = 0;
             } else {
@@ -105,6 +106,7 @@ const handleKeyDownEvent = (event) => {
             playSound(SFX.BUTTON_SELECT)
             refreshTerminal(true);
         } else if (currentCarrouselOption < (carrouselItems - 1)) {
+            event.preventDefault()
             currentCarrouselOption ++;
             playSound(SFX.CARROUSEL_DOWN)
             refreshCarrousel();
@@ -113,6 +115,7 @@ const handleKeyDownEvent = (event) => {
     } else if (event.key == "ArrowUp") {
 
         if (buttonsToSelect > 0) {
+            event.preventDefault()
             if (selectedButton <= -1) {
                 selectedButton = buttonsToSelect - 1;
             } else {
@@ -121,6 +124,7 @@ const handleKeyDownEvent = (event) => {
             playSound(SFX.BUTTON_SELECT)
             refreshTerminal(true);
         } else if (currentCarrouselOption > 0) {
+            event.preventDefault()
             currentCarrouselOption --;
             playSound(SFX.CARROUSEL_UP)
             refreshCarrousel();

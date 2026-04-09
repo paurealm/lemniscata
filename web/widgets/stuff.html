@@ -8,13 +8,67 @@
     </head>
     <body>
         <div id="widgets">
-            <a href="https://lemniscata.net/terminal.html" target="_top">
-                <div class="widget">
-                    <img src="../resources/media/celesteputadora.gif">
-                </div>
-                <p class="widget-title">Terminal</p>
-                <p class="widget-description">Deja notas y desencripta mensajes personales en el Terminal Celeste</p>
-            </a>
+            <div class="widget-container">
+                <a href="https://lemniscata.net/terminal.html" target="_top">
+                    <div class="widget">
+                        <img src="../resources/media/celesteputadora.gif">
+                    </div>
+                    <p class="widget-title">Terminal</p>
+                    <p class="widget-description">Deja notas y desencripta mensajes personales en el Terminal Celeste</p>
+                </a>
+            </div>
+            
+            <div class="widget-container">
+                <a href="#" onclick="openSong();">
+                    <div class="widget">
+                        <img src="../resources/media/jukebox.gif">
+                    </div>
+                    <p class="widget-title">Musiquita</p>
+                    <p class="widget-description">Me paso el día con música, y aunque soy de las que repiten las mismas 10 canciones en bucle he hecho una lista con ejemplos de los estilos que me gustan. ¡Haz click para abrir una canción aleatoria de esa lista!</p>
+                </a>
+            </div>
         </div>
+        <script>
+            const songs = [
+                "https://www.youtube.com/watch?v=SPfS_bhIWVY", // Te quiero - Axolotes Mexicanos
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Never gonna give you up - Rick Astley
+                "https://www.youtube.com/watch?v=9TczL8fJi-0", // Farewell - Lena Raine (Celeste)
+                "https://www.youtube.com/watch?v=MI19iKuNeHg", // Estiu - Zoo
+                "https://www.youtube.com/watch?v=8QG7CEuUqMc", // Every time we touch (Nightcore)
+                "https://www.youtube.com/watch?v=1-xGerv5FOk", // Alone - Alan Walker
+                "https://www.youtube.com/watch?v=pJJhNz_VQ5M", // Rigoberta Bandini - Fiesta
+                "https://www.youtube.com/watch?v=vcaPiiFZu2o", // Ocean man - Ween
+                "https://www.youtube.com/watch?v=gzbLODUb1sA", // I really wanna stay at your house - (Cyberpunk)
+                "https://www.youtube.com/watch?v=kK81m-A3qpU", // Otherside - Lena Raine (Minecraft)
+                "https://www.youtube.com/watch?v=kiGDvM14Kwg", // The code - Nemo
+                "https://www.youtube.com/watch?v=uKQlPO3wY0E", // Volcans - Buhos
+                "https://www.youtube.com/watch?v=sh2lLZBnrfA", // Madrid city - Ana Mena
+                "https://www.youtube.com/watch?v=eEFVxI9lqjU", // Everything goes on - Porter Robinson (League of Legends)
+                "https://www.youtube.com/watch?v=okkAdMLVXkY", // Fire to the fuse - Jackson Wang (League of Legends)
+                "https://www.youtube.com/watch?v=9sg-A-eS6Ig", // Súbeme la radio - Enrique Iglesias
+                "https://www.youtube.com/watch?v=zMc7Hu5GAe4", // Perreo cuántico - Javi Moreno, Javier Santaolalla
+                "https://www.youtube.com/watch?v=K-6XDY_prxM", // Tanca els ulls - Txarango
+                "https://www.youtube.com/watch?v=M-P4QBt-FWw", // Darkside - Alan Walker
+                "https://www.youtube.com/watch?v=fc1tg9qkGyI", // Explorers - Hinkik
+                "https://www.youtube.com/watch?v=6RLLOEzdxsM", // All falls down - Alan Walker
+                "https://www.youtube.com/watch?v=H7t2FL1SRaE", // Deadstick - King Gizzard & The Lizard Wizard
+                "https://www.youtube.com/watch?v=zDktApy8Sn0", // Leave the city - Twenty one pilots
+                "https://www.youtube.com/watch?v=eJnQBXmZ7Ek", // Chlorine - Twenty one pilots
+                "https://www.youtube.com/watch?v=3CAV2JMwdvk", // Carnival C - (Constance)
+                "https://www.youtube.com/watch?v=KuwqHdnHMgg", // Earth & Wind Gods' Harmony - TLOZ WindWaker
+                "https://www.youtube.com/watch?v=yebNIHKAC4A", // Golden - HUNTR/X
+                "https://www.youtube.com/watch?v=nSkDpIj0Y7w", // Me, myself and the night - Alan Walker
+                "https://www.youtube.com/watch?v=XmMoiB5n8vQ", // Cançó que mai s'acaba - La Fúmiga
+                "https://www.youtube.com/watch?v=ouQ-USN19bg", // Quan caminàvem - Aspencat
+                "https://www.youtube.com/watch?v=qmsjvBivRkU", // Grimm theme - Hollow Knight
+            ];
+
+            openSong = function () {
+                const random = Math.random() * songs.length;
+                const link = songs[parseInt(random, 10)];
+
+                window.open(link);
+            };
+        </script>
     </body>
 </html>

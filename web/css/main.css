@@ -7,6 +7,8 @@
     --accent-color: #e6b24a;
 
     --window-title-size: 1.25em;
+    
+    --rainbow-border-angle: 0deg;
 }
 
 * {
@@ -29,9 +31,23 @@ html, body {
 
 body {
     /*background-color: var(--background-color);*/
+    background-color: black;
     background-image: url("../resources/media/stars/stars8.gif");
+    
 }
 
 iframe {
     border: 0px;
+}
+
+@keyframes rainbow-rotate {
+	to {
+		--rainbow-border-angle: 360deg;
+	}
+}
+
+@property --rainbow-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }

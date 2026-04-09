@@ -74,18 +74,22 @@
     padding-top: 30px;
     padding-bottom: 30px;
     position:sticky;
-    bottom: -65px;
+    bottom: 0px;
 
     transition: bottom 5s cubic-bezier(1,0,.74,.03), transition 0.5s;
     
 }
+/*
 
 #news-bar-container:hover {
     bottom: 25px;
 
     transition: bottom 0.3s, transition 0.5s;
 }
+    */
 
 #news-bar-container > iframe {
-    border-width: 0px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-left-width: 0;
+    border-right-width: 0;
 }
