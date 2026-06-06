@@ -98,7 +98,7 @@ const setupFiles = () => {
         redirect: "follow"
     })
     .then(response => response.json())
-    .then(data => createFileEntries(data.fileList))
+    .then(data => createFileEntries(data.files))
     .catch(error => console.error(error))
     .then(() => createFileEntries(["Ha habido un error D:"]))
 }
