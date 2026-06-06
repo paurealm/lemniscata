@@ -7,6 +7,7 @@ dotenv.config();
 const sendMessageApi = require('./apis/sendMessageApi')
 const decryptNotesApi = require('./apis/decryptNotesApi')
 const mailUtils = require("./utils/MailUtils")
+const staticFilesApi = require("./apis/staticFilesApi")
 
 app.use(express.json())
 
@@ -29,6 +30,12 @@ app.get('/decrypt_list', (req, res) => {
 
 app.post('/decrypt', (req, res) => {
     res.send({result: decryptNotesApi.decrypt(req.body.id, req.body.key)})
+})
+
+app.get('/static_lookup', (req, res) => {
+    staticFilesApi.readStaticFiles()
+        .then(files => res.send({files: files}))
+        .catch(() => res.sendStatus(500));
 })
 
 app.listen(port, () => {
