@@ -103,4 +103,4 @@ const setupFiles = () => {
     .catch(error => console.error(error))
 }
 
-setupFiles();
+window.onload = () => setupFiles();

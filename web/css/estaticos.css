@@ -9,6 +9,7 @@
     text-decoration: none;
 
     transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    word-break: break-all;
 }
 
 .file-entry:hover {
