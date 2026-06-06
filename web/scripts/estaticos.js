@@ -6,9 +6,9 @@ const setupFiles = () => {
         method: "GET",
         redirect: "follow"
     })
-    .then(response => response.json().files)
-    .then(files => {
-        for (let file of files) {
+    .then(response => response.json())
+    .then(data => {
+        for (let file of data.files) {
             console.log(file);
             
             const fileEntry = document.createElement("p");
