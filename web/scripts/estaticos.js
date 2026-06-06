@@ -70,6 +70,7 @@ const createFileEntries = fileList => {
     if (!fileContainer) return;
 
     for (let file of fileList) {
+        if (file === "index.html") continue;
         const link = `https://static.lemniscata.net/${file}`
 
         const fileEntry = document.createElement("a");
@@ -100,7 +101,6 @@ const setupFiles = () => {
     .then(response => response.json())
     .then(data => createFileEntries(data.files))
     .catch(error => console.error(error))
-    .then(() => createFileEntries(["Ha habido un error D:"]))
 }
 
 setupFiles();
