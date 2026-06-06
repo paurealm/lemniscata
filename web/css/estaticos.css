@@ -1,0 +1,25 @@
+.file-entry {
+    background-color: rgba(70, 90, 90, 0.521);
+    display: inline-block;
+    width: 40%;
+
+    margin: 10px;
+    padding: 5px;
+
+    text-decoration: none;
+
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.file-entry:hover {
+    background-color: rgb(86, 90, 70);
+    transform: scale(1.05);
+}
+
+.file-extension {
+    font-size: 0.7em;
+    background-color: rgb(151, 141, 0);
+    margin-left: 5px;
+    padding: 3px;
+    border-radius: 3px;
+}

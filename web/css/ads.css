@@ -12,10 +12,6 @@
     animation: 10s rainbow-rotate linear infinite;
 
     margin-top: 100px;
-}
-
-#contact-links {
-    /*background-color: var(--border-color);*/
     padding: 20px;
 }
 
