@@ -72,3 +72,17 @@ input[type=file]::-ms-browse {
     content: "uwu";
     animation: 900ms linear 0s infinite loader-bullets;
 }
+
+#link-container {
+    padding: 5px;
+    margin: 10px;
+}
+
+#result-link {
+    background-color: #00ccff57;
+    padding: 5px 15px 5px 15px;
+    box-shadow: 5px 5px 15px 5px rgba(33, 33, 126, 0.603);
+    border-radius: 5px 10px 5px 10px;
+
+    cursor: pointer;
+}

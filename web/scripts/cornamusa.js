@@ -125,8 +125,15 @@ const showUploadSuccess = url => {
         const linkField = document.getElementById("result-link");
         linkField.innerHTML = url
 
+        const copyConfirm = document.getElementById("link-copy-confirmation");
+
         linkField.addEventListener("click", event => {
             navigator.clipboard.writeText(url)
+            copyConfirm.style = ""
+
+            setTimeout(() => {
+                copyConfirm.style = "display: none;"
+            }, 1500)
         })
     }
 }
@@ -147,6 +154,7 @@ const showUploadFailed = reason => {
 }
 
 showUploadForm()
+showUploadSuccess("https://uwu.com/XDDD")
 
 setupSubmitListener()
 setupUploadingTexts()

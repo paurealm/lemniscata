@@ -55,7 +55,9 @@
                 <div id="upload-success-container">
                     <p>Tu paquete ha sido entregado en la oficina postal con éxito</p>
                     <img src="resources/media/cornamusa/postman_boo.gif" height="300vh">
-                    <p>Aquí tienes tu link: <span id="result-link">(Si lees esto es que algo ha ido mal XD)</span></p>
+                    <p id="link-container">Aquí tienes tu link: <span id="result-link">(Si lees esto es que algo ha ido mal XD)</span></p>
+                    <p id="link-copy-confirmation" style="display: none;">Link copiado al portapapeles</p>
+                    <button onclick="location.reload();">Puedes subir otro archivo</button>
                 </div>
 
                 <div id="upload-failed-container">
