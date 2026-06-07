@@ -57,10 +57,7 @@ const sendFile = async (code, form) => {
             if (response.status === 200) {
                 fetch("https://webapi.lemniscata.net/cornamusa/file", {
                     method: "POST",
-                    body: new FormData(form),
-                    headers: {
-                        "Content-type": "multipart/form-data"
-                    }
+                    body: new FormData(form)
                 })
                     .then(uploadResponse => {
                         if (uploadResponse.status == 200) {
