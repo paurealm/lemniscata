@@ -154,7 +154,6 @@ const showUploadFailed = reason => {
 }
 
 showUploadForm()
-showUploadSuccess("https://uwu.com/XDDD")
 
 setupSubmitListener()
 setupUploadingTexts()
