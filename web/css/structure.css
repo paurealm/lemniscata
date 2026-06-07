@@ -29,6 +29,7 @@
 
 #left-content {
     width: 18%;
+    height: 150vh;
 
     display: inline-block;
 
@@ -48,6 +49,7 @@
 
 #right-content {
     width: 18%;
+    height: 150vh;
 
     display: inline-block;
 
