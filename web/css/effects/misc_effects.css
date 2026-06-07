@@ -1,0 +1,26 @@
+@keyframes loader-bullets {
+    0% {
+        content: "𓃉𓃉𓃉";
+    }
+    15% {
+        content: "𓃉𓃉∘";
+    }
+    30% {
+        content: "𓃉∘°";
+    }
+    45% {
+        content: "∘°∘";
+    }
+    60% {
+        content: "°∘𓃉";
+    }
+    75% {
+        content: "∘𓃉𓃉";
+    }
+    90% {
+        content: "𓃉𓃉𓃉";
+    }
+    100% {
+        content: "𓃉𓃉𓃉";
+    }
+}

@@ -1,0 +1,74 @@
+input, button {
+    display: block;
+    margin: 20px;
+    padding: 5px;
+    border: 1px solid rgb(238, 255, 0);
+    border-radius: 5px 0 5px 0;
+    width: 90%;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgba(255, 127, 80, 0.253);
+}
+
+input[type=text] {
+    width: inherit;
+}
+
+input[type=submit], button {
+    width: 60%;
+}
+
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+input[type=file]::-webkit-file-upload-button {
+    display: block;
+    width: 0;
+    height: 0;
+    margin-left: -100%;
+}
+
+input[type=file]::-ms-browse {
+    display: none;
+}
+
+#form-container {
+    display: inline-block;
+    width: 75%;
+}
+
+#postman-pat-container {
+    display: inline-block;
+
+    height: 20vh;
+    width: 20%;
+
+    position: relative;
+    z-index: -10;
+}
+
+#postman-pat {
+    width: 15vh;
+
+    transform: rotate(20deg);
+    animation: gif-animation 1s steps(2, jump-none) infinite
+}
+
+@keyframes gif-animation {
+  to {
+    transform: rotate(-20deg);
+  }
+}
+
+#center-content img {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#uploading-loader::after {
+    content: "uwu";
+    animation: 900ms linear 0s infinite loader-bullets;
+}

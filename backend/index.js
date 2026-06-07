@@ -6,8 +6,9 @@ dotenv.config();
 
 const sendMessageApi = require('./apis/sendMessageApi')
 const decryptNotesApi = require('./apis/decryptNotesApi')
-const mailUtils = require("./utils/MailUtils")
 const staticFilesApi = require("./apis/staticFilesApi")
+const cornamusaApi = require("./apis/cornamusaApi")
+const mailUtils = require("./utils/MailUtils")
 
 app.use(express.json())
 
@@ -37,6 +38,8 @@ app.get('/static_lookup', (req, res) => {
         .then(files => res.send({files: files}))
         .catch(() => res.sendStatus(500));
 })
+
+cornamusaApi.setupEndpoints(app)
 
 app.listen(port, () => {
     mailUtils.setupMailer()

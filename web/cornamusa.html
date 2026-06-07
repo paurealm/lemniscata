@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lemniscata</title>
+        <link type="text/css" rel="stylesheet" href="css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="css/structure.css"/>
+        <link type="text/css" rel="stylesheet" href="css/effects/misc_effects.css"/>
+        <link type="text/css" rel="stylesheet" href="css/cornamusa.css"/>
+    </head>
+    <body>
+        <div id="title-container">
+            <a href="index.html">
+                <div id="title-container">
+                    <img src="resources/media/logo.gif">
+                </div>
+            </a>
+        </div>
+        <div id="content-container">
+            <div id="left-content"></div>
+            <div id="center-content">
+                <div id="links">
+                    <a href="index.html">Inicio</a>
+                    <a href="museo.html">Museo</a>
+                    <a href="info.html">Info</a>
+                </div>
+                <div id="content-windows" style="display: block;">
+                    <div class="info-block">
+                        <h1>Cornamusa</h1>
+                        <p>Si quieres compartir algún archivo rápidamente puedes subirlo aquí y se generará un enlace para que puedas descargarlo. El enlace desaparecerá en el tiempo que especifiques</p>
+                        <p>Necesitarás un código. Si no tienes un código, pídele a Paula un código. El código sirve para que la gente sin código no pueda subir cosas. Código. Por si no he repetido la palabra las suficientes veces.</p>
+                    </div>
+                </div>
+
+                <div id="upload-container">
+                    <div id="postman-pat-container">
+                        <img id="postman-pat" src="resources/media/cornamusa/pat.png">
+                    </div>
+                    <div id="form-container">
+                        <form id="upload-form">
+                            <input type="file" name="file" id="file-input" required>
+                            <input type="text" name="code" id="code-input" minlength="6" maxlength="6" size="6" pattern="^[0-9]*$" required>
+                            <input type="submit" value="Subir archivo">
+                        </form>
+                    </div>
+                </div>
+
+                <div id="uploading-container">
+                    <p id="uploading-loader">Subiendo el archivo </p>
+                    <img id="uploading-image" src="resources/media/cornamusa/traveling_pat_1.gif" height="300vh">
+                    <p id="uploading-splash">Patata</p>
+                </div>
+
+                <div id="upload-success-container">
+                    <p>Tu paquete ha sido entregado en la oficina postal con éxito</p>
+                    <img src="resources/media/cornamusa/postman_boo.gif" height="300vh">
+                    <p>Aquí tienes tu link: <span id="result-link">(Si lees esto es que algo ha ido mal XD)</span></p>
+                </div>
+
+                <div id="upload-failed-container">
+                    <p>Vaya, ha habido algún fallo al enviar tu paquete :(</p>
+                    <img src="resources/media/cornamusa/macapaca.gif" height="300vh">
+                    <button onclick="location.reload();">Siempre puedes reintentarlo</button>
+                </div>
+            </div>
+            <div id="right-content"></div>
+        </div>
+
+        <script src="scripts/cornamusa.js"></script>
+    </body>
+</html>
