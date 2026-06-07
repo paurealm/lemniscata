@@ -158,7 +158,10 @@ const showUploadFailed = reason => {
 }
 
 const showFilePreview = fileId => {
+    hideAllSections()
 
+    const section = document.getElementById("file-preview")
+    section.style.display = ''
 }
 
 const showFilePreviewFailed = () => {
