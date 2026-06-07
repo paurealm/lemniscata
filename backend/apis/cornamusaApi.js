@@ -33,7 +33,7 @@ const setupEndpoints = app => {
             epochTolerance: 10
         })
 
-        console.log("File:", file)
+        console.log("File:", req.file)
 
         if (result.valid) {
             const fileCode = nanoid.nanoid()
