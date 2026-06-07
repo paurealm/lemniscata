@@ -33,6 +33,8 @@ const setupEndpoints = app => {
             epochTolerance: 10
         })
 
+        console.log("File:", file)
+
         if (result.valid) {
             const fileCode = nanoid.nanoid()
             const fileName = `${fileCode}_${req.file.originalname}`

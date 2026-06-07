@@ -24,4 +24,6 @@ jobs:
             cd /var/www/lemniscata/
             git reset --hard
             git pull origin main
+            cd /var/www/lemniscata/backend/
+            pnpm install
             sudo systemctl restart webapi.lemniscata
