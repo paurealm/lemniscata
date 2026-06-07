@@ -97,11 +97,15 @@ const hideAllSections = () => {
     const uploading = document.getElementById("uploading-container")
     const uploadSuccess = document.getElementById("upload-success-container")
     const uploadFailed = document.getElementById("upload-failed-container")
+    const preview = document.getElementById("file-preview")
+    const previewFailed = document.getElementById("file-preview-failed")
 
     uploadForm.style.display = 'none'
     uploading.style.display = 'none'
     uploadSuccess.style.display = 'none'
     uploadFailed.style.display = 'none'
+    preview.style.display = 'none'
+    previewFailed.style.display = 'none'
 }
 
 const showUploadForm = () => {
@@ -153,9 +157,56 @@ const showUploadFailed = reason => {
     }
 }
 
-showUploadForm()
+const showFilePreview = fileId => {
+
+}
+
+const showFilePreviewFailed = () => {
+    hideAllSections()
+    const section = document.getElementById("file-preview-failed")
+    section.style.display = ''
+}
+
+const params = new URLSearchParams(document.location.search)
+const fileParam = params.get("file")
+
+if (fileParam) {
+    fetch("https://webapi.lemniscata.net/cornamusa/file/" + fileParam, {
+        method: "GET",
+        redirect: "follow"
+    })
+        .then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    const fileName = data.fileName;
+
+                    const downloadButton = document.getElementById("download-button")
+                    downloadButton.addEventListener("click", event => {
+                        const aElement = document.createElement("a")
+                        aElement.download = `https://webapi.lemniscata.net/cornamusa/file/${fileParam}/download`
+                        aElement.style = "display: none;"
+
+                        document.body.appendChild(aElement);
+                        aElement.click()
+                        document.body.removeChild(aElement)
+                    })
+                })
+            } else {
+                console.log("No hay archivos con el id", fileParam)
+                showFilePreviewFailed();
+            }
+        })
+        
+        .catch(error => {
+            console.log("Error recuperando el archivo:", error)
+            showFilePreviewFailed();
+        })
+} else {
+    showUploadForm()
+}
 
 setupSubmitListener()
 setupUploadingTexts()
 setupUploadingImage()
 setInterval(updateUploadingText, 7500)
+
