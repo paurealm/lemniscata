@@ -24,14 +24,37 @@ const locateFileByCode = async (code, onError, onNotFound) => {
 
 }
 
-const setupEndpoints = app => {
-    app.post('/cornamusa', upload.single("file"), async (req, res) => {
+const checkTotpCode = async (code) => {
+    return await otplib.verify({
+        secret: process.env.CORNAMUSA_SECRET,
+        token: code,
+        epochTolerance: 10
+    })
+}
 
-        const result = await otplib.verify({
-            secret: process.env.CORNAMUSA_SECRET,
-            token: req.body.code,
-            epochTolerance: 10
-        })
+const setupEndpoints = app => {
+
+    app.get('/cornamusa/code', (req, res) => {
+        const code = req.query.code;
+        if (!code) {
+            res.sendStatus(400)
+            return;
+        }
+
+        checkTotpCode(code)
+            .then(result => {
+                if (result.valid) {
+                    res.sendStatus(200)
+                } else {
+                    res.sendStatus(403)
+                }
+            }).catch(() => res.sendStatus(500));
+
+    })
+
+    app.post('/cornamusa/file', upload.single("file"), async (req, res) => {
+
+        const result = await checkTotpCode(req.body.code)
 
         console.log("File:", req.file)
 
@@ -46,7 +69,7 @@ const setupEndpoints = app => {
                         res.sendStatus(500)
                     } else {
                         res.send({
-                            url: `https://webapi.lemniscata.net/cornamusa/${fileCode}`
+                            url: `https://webapi.lemniscata.net/cornamusa/file/${fileCode}`
                         })
                     }
                 }
@@ -58,7 +81,7 @@ const setupEndpoints = app => {
 
     })
 
-    app.get("/cornamusa/:fileCode", (req, res) => {
+    app.get("/cornamusa/file/:fileCode", (req, res) => {
         const fileCode = req.params.fileCode;
         if (!fileCode || (fileCode.length !== 21)) {
             res.sendStatus(400)
@@ -83,7 +106,7 @@ const setupEndpoints = app => {
 
     })
 
-    app.get("/cornamusa/:fileCode/download", (req, res) => {
+    app.get("/cornamusa/file/:fileCode/download", (req, res) => {
         const fileCode = req.params.fileCode;
         if (!fileCode || (fileCode.length !== 21)) {
             res.sendStatus(400)

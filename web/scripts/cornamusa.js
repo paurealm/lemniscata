@@ -41,28 +41,58 @@ const setupSubmitListener = () => {
         if (fileInputElement.files.length == 1) {
             showUploading()
 
-            const file = fileInputElement.files[0]
-            const reader = new FileReader()
-
-            reader.addEventListener("loadend", event => {
-                sendFile(codeInputElement.value, event.target.result)
-            })
-
-            reader.readAsArrayBuffer(file)
+            sendFile(codeInputElement.value, event.target)
         }
     })
 }
 
-const sendFile = (code, file) => {
+const sendFile = async (code, form) => {
     console.log("sending file...")
 
-    fetch("https://webapi.lemniscata.net/upload_cornamusa_file", {
-        method: "POST",
-        body: [],
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
+    fetch("https://webapi.lemniscata.net/cornamusa/code?code=" + code, {
+        method: "GET",
+        redirect: "follow"
     })
+        .then(response => {
+            if (response.status === 200) {
+                fetch("https://webapi.lemniscata.net/cornamusa/file", {
+                    method: "POST",
+                    body: new FormData(form),
+                    headers: {
+                        "Content-type": "multipart/form-data"
+                    }
+                })
+                    .then(uploadResponse => {
+                        if (uploadResponse.status == 200) {
+                            uploadResponse.json()
+                                .then(result => {
+                                    const resultUrl = result.url;
+                                    showUploadSuccess(resultUrl);
+                                })
+                                .catch(error => {
+                                    showUploadFailed("Fallo de red, posiblemente")
+                                    console.log("Error parseando json de /cornamusa/file:", error)
+                                })
+                        } else {
+                            showUploadFailed(response.status)
+                            console.log("Respuesta de /cornamusa/file con código " + code + ":", response.status)
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Fallo al subir el archivo:", error)
+                        showUploadFailed("Fallo de red, seguramente")
+                    })
+            } else {
+                showUploadFailed(response.status)
+                console.log("Respuesta de /cornamusa/code con código " + code + ":", response.status)
+            }
+        })
+        .catch(error => {
+            console.log("Fallo al comprobar el código:", error)
+            showUploadFailed("Fallo de red, probablemente")
+        })
+
+    
 }
 
 const hideAllSections = () => {
