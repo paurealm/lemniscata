@@ -41,7 +41,7 @@ const setupSubmitListener = () => {
         if (fileInputElement.files.length == 1) {
             showUploading()
 
-            sendFile(codeInputElement.value, event.target)
+            setTimeout(() => sendFile(codeInputElement.value, event.target), 2000)
         }
     })
 }
@@ -120,12 +120,30 @@ const showUploadSuccess = url => {
     hideAllSections()
     const section = document.getElementById("upload-success-container")
     section.style.display = ''
+
+    if (url) {
+        const linkField = document.getElementById("result-link");
+        linkField.innerHTML = url
+
+        linkField.addEventListener("click", event => {
+            navigator.clipboard.writeText(url)
+        })
+    }
 }
 
 const showUploadFailed = reason => {
     hideAllSections()
     const section = document.getElementById("upload-failed-container")
     section.style.display = ''
+
+    if (reason) {
+        const failField = document.getElementById("fail-reason");
+        failField.innerHTML = reason
+
+        failField.addEventListener("click", event => {
+            navigator.clipboard.writeText(url)
+        })
+    }
 }
 
 showUploadForm()
