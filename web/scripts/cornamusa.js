@@ -171,6 +171,8 @@ const params = new URLSearchParams(document.location.search)
 const fileParam = params.get("file")
 
 if (fileParam) {
+    hideAllSections();
+
     fetch("https://webapi.lemniscata.net/cornamusa/file/" + fileParam, {
         method: "GET",
         redirect: "follow"
@@ -180,16 +182,13 @@ if (fileParam) {
                 response.json().then(data => {
                     const fileName = data.fileName;
 
-                    const downloadButton = document.getElementById("download-button")
-                    downloadButton.addEventListener("click", event => {
-                        const aElement = document.createElement("a")
-                        aElement.download = `https://webapi.lemniscata.net/cornamusa/file/${fileParam}/download`
-                        aElement.style = "display: none;"
+                    showFilePreview(fileName)
 
-                        document.body.appendChild(aElement);
-                        aElement.click()
-                        document.body.removeChild(aElement)
-                    })
+                    const downloadButton = document.getElementById("download-button")
+                    downloadButton.innerHTML = fileName;
+
+                    const downloadLinkA = document.getElementById("download-link-a")
+                    downloadLinkA.download = `https://webapi.lemniscata.net/cornamusa/file/${fileParam}/download`;
                 })
             } else {
                 console.log("No hay archivos con el id", fileParam)

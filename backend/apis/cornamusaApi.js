@@ -69,7 +69,7 @@ const setupEndpoints = app => {
                         res.sendStatus(500)
                     } else {
                         res.send({
-                            url: `https://webapi.lemniscata.net/cornamusa/file/${fileCode}`
+                            url: `https://lemniscata.net/cornamusa?file=${fileCode}`
                         })
                     }
                 }
