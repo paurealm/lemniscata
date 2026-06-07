@@ -187,12 +187,10 @@ if (fileParam) {
 
                     showFilePreview(fileName)
 
-                    const downloadButton = document.getElementById("download-button")
-                    downloadButton.innerHTML = fileName;
-
                     const downloadLinkA = document.getElementById("download-link-a")
                     downloadLinkA.href = `https://webapi.lemniscata.net/cornamusa/file/${fileParam}/download`
                     downloadLinkA.download = fileName;
+                    downloadLinkA.innerHTML = fileName
                 })
             } else {
                 console.log("No hay archivos con el id", fileParam)
