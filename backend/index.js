@@ -44,5 +44,5 @@ cornamusaApi.setupEndpoints(app)
 app.listen(port, () => {
     mailUtils.setupMailer()
     decryptNotesApi.setupApi()
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Lemniscata WebApi listening on port ${port}`)
 })

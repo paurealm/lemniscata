@@ -28,7 +28,7 @@ const checkTotpCode = async (code) => {
     return await otplib.verify({
         secret: process.env.CORNAMUSA_SECRET,
         token: code,
-        epochTolerance: 10
+        epochTolerance: 90
     })
 }
 
