@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lemniscata</title>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/structure.css"/>
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            input[type=number] {
+                -moz-appearance:textfield;
+            }
+
+            .otp-code-container {
+                margin: 10px;
+            }
+
+            .otp-code-digit {
+                padding: 5px;
+            }
+
+            input, button {
+                display: block;
+                margin: 20px;
+                padding: 5px;
+                border: 1px solid rgb(238, 255, 0);
+                border-radius: 5px 0 5px 0;
+
+                margin-left: auto;
+                margin-right: auto;
+
+                background-color: rgba(255, 127, 80, 0.253);
+            }
+
+            input[type=number] {
+                display: inline-block;
+            }
+            
+
+        </style>
+    </head>
+    <body>
+        <div id="title-container">
+            <a href="index">
+                <div id="title-container">
+                    <img src="https://lemniscata.net/resources/media/logo.gif">
+                </div>
+            </a>
+        </div>
+        <div id="content-container">
+            <div id="left-content"></div>
+            <div id="center-content">
+                <div id="content-windows" style="display: block;">
+                    <div class="info-block">
+                        <h1>Cartago</h1>
+                        <p>Anda, ¿cómo tú por aquí?</p>
+                        <p>Esta zona de Lemniscata no está abierta al público. Aquí guardamos los trastos y las cosas privadas, nada interesante. Te sale más a cuenta <a href="https://lemniscata.net">volver a la zona pública</a>.</p>
+                        <p>Si aún así insistes en entrar, muestra tu acreditación.</p>
+                    </div>
+                    <div id="form-container">
+                        <form id="login-form" method="POST" action="/login">
+                            <input name="username" type="text" autocomplete="username" required>
+                            <input name="password" type="password" autocomplete="current-password" required>
+                            <div class="otp-code-container" id="otp-container">
+                                <input class="otp-code-digit" id="otp-1" type="number" min="0" max="9" required>
+                                <input class="otp-code-digit" id="otp-2" type="number" min="0" max="9" required>
+                                <input class="otp-code-digit" id="otp-3" type="number" min="0" max="9" required>
+                                <input class="otp-code-digit" id="otp-4" type="number" min="0" max="9" required>
+                                <input class="otp-code-digit" id="otp-5" type="number" min="0" max="9" required>
+                                <input class="otp-code-digit" id="otp-6" type="number" min="0" max="9" required>
+                            </div>
+                            <input id="login-button" type="submit" value="Iniciar sesión">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="right-content"></div>
+        </div>
+
+        <script>
+            for (let otpContainer of document.getElementsByClassName("otp-code-container")) {
+                const fillCode = code => {
+                    const otpDigits = Array.from(otpContainer.children).filter(element => element.classList.contains("otp-code-digit"))
+                    if (code.match(/^[0-9]+$/) && code.length == otpDigits.length) {
+                        for (let i = 0; i < otpDigits.length; i ++) {
+                            otpDigits[i].value = code.charAt(i)
+                        }
+                    }
+                }
+
+                for (let otpDigit of otpContainer.children) {
+                    if (otpDigit.classList.contains("otp-code-digit")) {
+
+                        otpDigit.addEventListener("paste", event => {
+                            event.preventDefault()
+                            fillCode(event.clipboardData.getData("text/plain"))
+                        })
+
+                        otpDigit.addEventListener("keydown", event => {
+                            event.preventDefault();
+
+                            if (event.keyCode == 8 || event.keyCode == 46) {
+                                console.log("focusing...")
+                                if (otpDigit.value && otpDigit.value.length > 0) {
+                                    console.log("yes value")
+                                    otpDigit.value = '';
+                                } else {
+                                    const children = Array.from(otpContainer.children)
+                                    let index = children.indexOf(otpDigit)
+                                    if (index != -1) {
+                                        while (--index >= 0) {
+                                            
+                                            if (children[index].classList.contains("otp-code-digit")) {
+                                                children[index].focus()
+                                                children[index].value = ''
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (event.key.match(/^[0-9]+$/)) {
+                                otpDigit.value = event.key
+
+                                const children = Array.from(otpContainer.children)
+                                let index = children.indexOf(otpDigit)
+                                if (index != -1) {
+                                    while (++index < children.length) {
+                                        if (children[index].classList.contains("otp-code-digit")) {
+                                            children[index].focus()
+                                            return;
+                                        }
+                                    }
+
+                                    otpDigit.blur()
+
+                                }
+                            } else if (event.key.toUpperCase() === "V" && event.ctrlKey == true) {
+                                navigator.clipboard.readText().then(code => fillCode(code))
+                            }
+                        })
+                    }
+                }
+            }
+            
+        </script>
+
+        <script>
+            const joinOtpDigits = container => {
+                return Array.from(container.children).filter(element => element.classList.contains("otp-code-digit")).map(element => element.value).join("")
+            }
+
+            const loginButton = document.getElementById("login-button")
+            if (loginButton) {
+                loginButton.addEventListener("click", () => {
+                    event.preventDefault();
+
+                    const loginForm = document.getElementById("login-form")
+                    if (!loginForm) return;
+
+                    const formData = new FormData(loginForm)
+
+                    console.log()
+                    console.log()
+                    console.log()
+
+                    fetch("/login", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            username: formData.get("username"),
+                            password: formData.get("password"),
+                            otp: joinOtpDigits(document.getElementById("otp-container"))
+                        }),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    }).then(response => {
+                        if (response.status === 200) {
+                            window.location.href="/cartago"
+                        }
+                    }).catch(error => {
+                        console.log("Error al hacer login:", error)
+                    })
+                
+                })
+            }
+
+            
+        </script>
+    </body>
+</html>

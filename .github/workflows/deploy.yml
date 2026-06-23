@@ -27,3 +27,5 @@ jobs:
             cd /var/www/lemniscata/backend/
             pnpm install
             sudo systemctl restart webapi.lemniscata
+            cd /var/www/lemniscata/cartago
+            pnpm install

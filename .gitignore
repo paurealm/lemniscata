@@ -1,4 +1,10 @@
+*/.env
+
 backend/node_modules
 backend/.env
-cartago/server/node_modules
-cartago/server/.env
+
+cartago/node_modules
+cartago/.env
+*.key
+*.pem
+*/.userdb.json
