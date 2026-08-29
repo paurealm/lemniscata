@@ -18,11 +18,11 @@ jobs:
           key: ${{ secrets.COMMANDCORE_SSH_KEY }}
           port: 22
           script: |
-            cd /var/www/lemniscata/
+            cd /var/www/lemniscata/core/
             git reset --hard
             git pull origin main
-            cd /var/www/lemniscata/backend/
+            cd /var/www/lemniscata/core/backend/
             pnpm install
             sudo systemctl restart webapi.lemniscata
-            cd /var/www/lemniscata/cartago
+            cd /var/www/lemniscata/core/cartago/
             pnpm install
