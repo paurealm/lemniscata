@@ -16,9 +16,9 @@ jobs:
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.LEMNISCLOUD_HOST }}
+          host: ${{ secrets.COMMANDCORE_HOST }}
           username: 'redstone'
-          key: ${{ secrets.LEMNISCLOUD_DEPLOY_KEY }}
+          key: ${{ secrets.COMMANDCORE_SSH_KEY }}
           port: 22
           script: |
             cd /var/www/lemniscata/
