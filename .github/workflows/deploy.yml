@@ -7,11 +7,11 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.COMMANDCORE_HOST }}
           username: 'redstone'
@@ -23,6 +23,7 @@ jobs:
             git pull origin main
             cd /var/www/lemniscata/core/backend/
             pnpm install
-            sudo systemctl restart webapi.lemniscata
+            sudo systemctl restart lemniscata.webapi
             cd /var/www/lemniscata/core/cartago/
             pnpm install
+            sudo systemctl restart lemniscata.cartago
