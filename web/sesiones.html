@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lemniscata</title>
+        <link type="text/css" rel="stylesheet" href="css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="css/structure.css"/>
+        <link type="text/css" rel="stylesheet" href="css/sesiones.css"/>
+    </head>
+    <body>
+
+        <video autoplay muted loop id="music-background">
+            <source id="music-background-source" src="" type="video/mp4">
+        </video>
+        <div id="music-background-overlay"></div>
+        <div id="title-container">
+            <a href="index">
+                <div id="title-container">
+                    <img src="resources/media/logo.gif">
+                </div>
+            </a>
+        </div>
+        <div id="content-container">
+            <div id="left-content">
+                <div id="playlist-container">
+                    <div class="playlist-element" style="display: none;">
+                        <img src="https://minecraft.wiki/images/Unknown_pack.png">
+                        <div class="playlist-data">
+                            <h4>Silksong</p>
+                            <p>6 elementos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="center-content">
+                <div id="links">
+                    <a href="index">Inicio</a>
+                    <a href="museo">Museo</a>
+                    <a href="info">Info</a>
+                </div>
+                <div id="content-windows" style="display: block;">
+                    <div class="info-block">
+                        <h1 id="page-audio-title">Sesiones</h1>
+                        <p id="page-audio-description">Ponte cascos y disfruta</p>
+                    </div>
+                    <div id="music-player">
+                        <div id="player-controls">
+                            <div class="player-control large-control" id="loop-icon">
+                                <svg id="loop-icon" viewBox="-5, -1, 90, 38">
+                                    <path d="M 41 17 C 51 -5 70 -5 81 17 C 89 33 57 31 41 17 C 22 -2 9 -3 1 17 C -4 31 31 37 41 17" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="player-control small-control" id="background-toggle">
+                                    <svg id="background-icon" viewBox="0 0 125 125">
+                                        <path d="M 23.59 0 h 96.41 a 23.68 23.68 0 0 1 0 0 V 105 H 0 V 0 A 23.66 23.66 0 0 1 0 0 Z Z Z Z Z Z m 90.41 27 H 3 V 79 l 22 23 h 89 Z M 50 50 L 50 80 C 47 86 66 70 72 66 C 74 65 74 64 72 63 C 64.6667 58.6667 47 44 50 50" />
+                                    </svg>
+                                </div>
+                                <div class="player-control" id="rewind-button">
+                                    <svg viewBox="0 0 16 16">
+                                        <path d="M 10.5 1 L 10.5 15 C 8.5 17 10.5 15 5.5 12 C -0.5 8 -0.5 8 5.5 4 C 10.5 1 8.5 -1 10.5 1 M 15.5 1 L 15.5 15 C 13.5 17 15.5 15 10.5 12 C 4.5 8 4.5 8 10.5 4 C 15.5 1 13.5 -1 15.5 1" />
+                                    </svg>
+                                </div>
+                                <div class="player-control" id="play-button">
+                                    <svg id="pause-icon" viewBox="-10 -10 20 20">
+                                        <path d="M -10 7 L -10 -7 C -8 -9 -10 -7 -3 -4 L -3 4 C -10 7 -8 9 -10 7 M 3 4 L 3 -4 C 10 -7 8 -9 10 -7 L 10 7 C 8 9 10 7 3 4" />
+                                    </svg>
+                                    <svg id="play-icon" viewBox="-10 -10 20 20">
+                                        <path d="M -4.5 7 L -4.5 -7 C -2.5 -9 -4.5 -7 0.5 -4 C 6.5 0 6.5 0 0.5 4 C -4.5 7 -2.5 9 -4.5 7" />
+                                    </svg>
+                                </div>
+                                <div class="player-control" id="advance-button">
+                                    <svg viewBox="0 0 16 16">
+                                        <path d="M 5.5 15 L 5.5 1 C 7.5 -1 5.5 1 10.5 4 C 16.5 8 16.5 8 10.5 12 C 5.5 15 7.5 17 5.5 15 M 0.5 15 L 0.5 1 C 2.5 -1 0.5 1 5.5 4 C 11.5 8 11.5 8 5.5 12 C 0.5 15 2.5 17 0.5 15" />
+                                    </svg>
+                                </div>
+                                <div class="player-control small-control" id="restart-button">
+                                    <svg viewBox="0 0 15 15">
+                                        <path d="M 3.4698 0.5673 L 8.2951 0.4875 C 13.3545 0.0267 14.3806 0.9196 14.8501 5.8794 C 14.8552 12.7058 14.8552 12.7058 7.4398 12.5589 C 1.6531 12.153 0.9857 12.8977 0.4003 5.8197 C 0.2907 0.1888 -0.7229 0.3008 3.4698 0.5673" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="player-control large-control" id="volume-slider">
+                                <svg id="volume-icon" viewBox="0, -12, 30, 13">
+                                    <style type="text/css">
+                                        #volume-icon-path{
+                                            fill:url(#MyGradient);
+                                        }
+                                    </style>
+                                    <defs>
+                                        <linearGradient id="MyGradient">
+                                        <stop offset="0%" stop-color="var(--music-color-secondary-light)" />
+                                        <stop class="volume-slider-step" offset="50%" stop-color="var(--music-color-secondary-light)" />
+                                        <stop class="volume-slider-step" offset="50%" stop-color="var(--music-color-secondary-dark)" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="volume-icon-path" d="M 11 0 L 0 0 C 13 -7 24 -5 29 -11 C 30 -12 30 0 29 0 C 18 0 19 0 11 0" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <svg id="progress-bar" viewBox="-40 -20 80 40">
+                                <path class="progress-bar-path" id="background-progress-bar" d="M 0 0 C 10 -20 40 -20 40 0 C 40 20 10 20 0 0 C -10 -20 -40 -20 -40 0 C -40 20 -10 20 0 0" />
+                                <path class="progress-bar-path" id="foreground-progress-bar" d="M 0 0 C 10 -20 40 -20 40 0 C 40 20 10 20 0 0 C -10 -20 -40 -20 -40 0 C -40 20 -10 20 0 0" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="audio-list">
+                        <div class="audio-element" style="display: none;">
+                            <img height="100%" src="https://minecraft.wiki/images/Unknown_pack.png">
+                            <div class="audio-data">
+                                <h4>Canción cancionosa</h4>
+                                <p>Artista</p>
+                                <p>Comentario comentarioso muy chulo que comenta comentarios</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="right-content"></div>
+        </div>
+
+        <script src="scripts/sesiones.js"></script>
+    </body>
+</html>
