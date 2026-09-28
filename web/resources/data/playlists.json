@@ -1,0 +1,78 @@
+{
+    "playlists": {
+        "splatoon": {
+            "name": "Splatoon",
+            "cover": "https://static.lemniscata.net/side_order.png",
+            "backgroundVideo": "https://static.lemniscata.net/side_order.mp4",
+            "colors": {
+                "primaryLight": "#f9eee4",
+                "primaryDark": "#857f7a",
+                "secondaryLight": "#c5a8cd",
+                "secondaryDark": "#6d5a72",
+                "detail": "#d1d684"
+            },
+            "audios": [
+                {
+                    "name": "Spectrum Obligato",
+                    "description": "Sore wa Splatoon :D",
+                    "artists": [
+                        "Cefalopop",
+                        "Dedf1sh"
+                    ],
+                    "image": "https://static.lemniscata.net/side_order.png",
+                    "url": "https://static.lemniscata.net/Spectrum_Obligato.mp3"
+                },
+                {
+                    "name": "Unconscience",
+                    "description": "Yo ko ko ko ko, yo ko ko ko ko",
+                    "artists": [
+                        "Marina Ida"
+                    ],
+                    "image": "https://static.lemniscata.net/side_order.png",
+                    "url": "https://static.lemniscata.net/unconscience.mp3"
+                },
+                {
+                    "name": "Into the Light",
+                    "description": "Arma antitartares",
+                    "artists": [
+                        "Cefalopop"
+                    ],
+                    "image": "https://static.lemniscata.net/octoexpansion.png",
+                    "url": "https://static.lemniscata.net/IntoTheLight.mp3"
+                },
+                {
+                    "name": "Final Drill",
+                    "description": "Melodía contra dioses salmónidos",
+                    "artists": [
+                        "Clan Surimi"
+                    ],
+                    "image": "https://static.lemniscata.net/splatoon_raiders.png",
+                    "url": "https://static.lemniscata.net/Final_drill.mp3"
+                }
+            ]
+        },
+        "silksong": {
+            "name": "Silksong",
+            "cover": "https://static.lemniscata.net/silksong.png",
+            "backgroundVideo": "https://static.lemniscata.net/silksong.mp4",
+            "colors": {
+                "primaryLight": "#b72f38",
+                "primaryDark": "#5c0d12",
+                "secondaryLight": "#eaf1f8",
+                "secondaryDark": "#8a605c",
+                "detail": "#ba552c"
+            },
+            "audios": [
+                {
+                    "name": "Lost Lace",
+                    "description": "Lesbianas un martes cualquiera",
+                    "artists": [
+                        "Christofer Larkin",
+                    ],
+                    "image": "https://static.lemniscata.net/silksong.png",
+                    "url": "https://static.lemniscata.net/Lost_lace.mp3"
+                }
+            ]
+        }
+    }
+}
