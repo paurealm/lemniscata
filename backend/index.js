@@ -34,7 +34,8 @@ app.post('/decrypt', (req, res) => {
 })
 
 app.get('/static_lookup', (req, res) => {
-    staticFilesApi.readStaticFiles()
+    console.log(req.query)
+    staticFilesApi.readStaticFiles(req.query.subfolder || "")
         .then(files => res.send({files: files}))
         .catch(() => res.sendStatus(500));
 })

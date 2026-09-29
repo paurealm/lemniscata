@@ -1,13 +1,60 @@
 const fs = require('fs');
+const path = require('path')
 
-const readStaticFiles = () => {
+const ROOT_PATH = path.normalize("/var/www/static")
+const METADATA_FILE_NAME = ".metadata"
+
+const readStaticFiles = subpath => {
     return new Promise((resolve, reject) => {
-        fs.readdir('/var/www/static', (error, files) => {
+        const searchPath = path.normalize(path.join(ROOT_PATH, subpath))
+
+        if (!searchPath.startsWith(ROOT_PATH)) {
+            reject()
+            return;
+        }
+
+        fs.readdir(searchPath, (error, files) => {
             if (error) {
                 reject();
                 return;
             }
-            resolve(files);
+
+            const result = []
+            let metadata = undefined
+
+            for (let element of files) {
+                const elementPath = path.join(searchPath, element)
+                
+                if (element == METADATA_FILE_NAME) {
+                    const metadataContent = fs.readFileSync(elementPath, "utf-8")
+                    try {
+                        metadata = JSON.parse(metadataContent)
+                    } catch (_) {}
+
+                    continue
+                };
+
+                const stat = fs.statSync(elementPath)
+
+                if (stat.isFile()) {
+                    result.push({
+                        name: element,
+                        type: "file",
+                        size: stat.size,
+                        modTime: parseInt(stat.mtimeMs)
+                    })
+                } else if (stat.isDirectory()) {
+                    result.push({
+                        name: element,
+                        type: "directory"
+                    })
+                }
+            }
+
+            resolve({
+                contents: result,
+                metadata
+            });
         })
     })
 }
