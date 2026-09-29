@@ -34,12 +34,14 @@ app.post('/decrypt', (req, res) => {
 })
 
 app.get('/static_lookup', (req, res) => {
-    console.log(req.query)
-    staticFilesApi.readStaticFiles(req.query.subfolder || "")
-        .then(files => res.send({files: files}))
+    console.log("Params:", req.query)
+    console.log("Leyendo cosos")
+    const subfolder = req.query.subfolder || ""
+    staticFilesApi.readStaticFiles(subfolder)
+        .then(files => res.send(files))
         .catch(error => {
             console.log("Error :(", error)
-            res.status(500).send(error)
+            res.status(503).send(error)
         });
 })
 
