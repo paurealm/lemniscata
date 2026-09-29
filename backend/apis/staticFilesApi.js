@@ -9,13 +9,13 @@ const readStaticFiles = subpath => {
         const searchPath = path.normalize(path.join(ROOT_PATH, subpath))
 
         if (!searchPath.startsWith(ROOT_PATH)) {
-            reject()
+            reject("Nos hemos levantado cachondos hoy, ¿eh?")
             return;
         }
 
         fs.readdir(searchPath, (error, files) => {
             if (error) {
-                reject();
+                reject("Error al leer el directorio D:");
                 return;
             }
 
