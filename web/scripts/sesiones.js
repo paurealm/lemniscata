@@ -187,7 +187,7 @@ const updateProgressBar = () => {
 }
 
 const setVolume = percentage => {
-        MUSIC_PLAYER.setVolume(percentage);
+        MUSIC_PLAYER.setVolume(percentage * percentage);
 
         for (let step of document.getElementsByClassName("volume-slider-step")) {
             step.setAttribute("offset", `${parseInt(percentage * 10000) / 100}%`)
@@ -449,4 +449,5 @@ setupLoopButton()
 setupAdvanceButton()
 setupRewindButton()
 setupPlaylists()
+setVolume(0.5)
 requestAnimationFrame(updateProgressBar)
