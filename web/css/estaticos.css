@@ -24,3 +24,7 @@
     padding: 3px;
     border-radius: 3px;
 }
+
+.file-entry.directory {
+    background-color: rgba(149, 153, 111, 0.521);
+}
