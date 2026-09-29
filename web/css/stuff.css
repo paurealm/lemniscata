@@ -6,6 +6,10 @@
     overflow: hidden;
 }
 
+html, body {
+    height: auto;
+}
+
 img {
     width: 100%;
 }
