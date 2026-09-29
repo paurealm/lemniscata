@@ -210,13 +210,13 @@
 
             if (ads) {
                 ads.addEventListener("load", () => {
-                    ads.style.height = `${ads.contentWindow.body.scrollHeight}px`
+                    ads.style.height = `${ads.contentWindow.document.body.scrollHeight}px`
                 })
             }
 
             if (stuff) {
                 stuff.addEventListener("load", () => {
-                    stuff.style.height = `${stuff.contentWindow.body.scrollHeight}px`
+                    stuff.style.height = `${stuff.contentWindow.document.body.scrollHeight}px`
                 })
             }
 
