@@ -37,7 +37,10 @@ app.get('/static_lookup', (req, res) => {
     console.log(req.query)
     staticFilesApi.readStaticFiles(req.query.subfolder || "")
         .then(files => res.send({files: files}))
-        .catch(error => res.status(500).send(error));
+        .catch(error => {
+            console.log("Error :(", error)
+            res.status(500).send(error)
+        });
 })
 
 cornamusaApi.setupEndpoints(app)
