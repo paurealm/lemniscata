@@ -1,0 +1,20 @@
+:root {
+    --background-color: #04000b;
+
+    --container-color: #1e1e1e;
+    --border-color: #3d4566;
+    --text-color: #becbd6;
+    --accent-color: #e6b24a;
+
+    --window-title-size: 1.25em;
+    
+    --rainbow-border-angle: 0deg;
+}
+
+body {
+    backdrop-filter:
+        grayscale(1)
+        sepia(1)
+        saturate(6)
+        hue-rotate(335deg);
+}

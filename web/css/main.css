@@ -1,6 +1,4 @@
 :root {
-    --background-color: #04000b;
-
     --container-color: #1e1e1e;
     --border-color: #3d4566;
     --text-color: #becbd6;
@@ -26,14 +24,13 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: auto;
 }
 
 body {
-    /*background-color: var(--background-color);*/
     background-color: black;
     background-image: url("../resources/media/stars/stars8.gif");
-    
+    padding-top: 2vh;
 }
 
 iframe {

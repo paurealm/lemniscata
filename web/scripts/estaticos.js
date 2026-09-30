@@ -171,24 +171,109 @@ const listDirectory = directoryData => {
 }
 
 const createEntries = response => {
-    const fileList = response.contents.filter(entry => entry.type == "file")
-    const directoryList = response.contents.filter(entry => entry.type == "directory")
-    
-    const fileContainer = document.getElementById("file-list")
-    if (!fileContainer) return;
 
-    fileContainer.innerHTML = ''
+    const groups = compileFilter(activeFilter)(response)
 
-    addParentDirectoryIfSubfolder()
+    for (let group in groups) {
+        const fileList = response.filter(entry => entry.type == "file")
+        const directoryList = response.filter(entry => entry.type == "directory")
+        
+        const fileContainer = document.getElementById("file-list")
+        if (!fileContainer) return;
 
-    for (let directoryData of directoryList) {
-        listDirectory(directoryData)
+        fileContainer.innerHTML = ''
+
+        addParentDirectoryIfSubfolder()
+
+        for (let directoryData of directoryList) {
+            listDirectory(directoryData)
+        }
+
+        for (let fileData of fileList) {
+            if (fileData.name === "index.html") continue;
+            listFile(fileData)
+        }
     }
 
-    for (let fileData of fileList) {
-        if (fileData.name === "index.html") continue;
-        listFile(fileData)
+}
+
+const setupSearchBar = () => {
+    const searchBar = document.getElementById("file-search-bar")
+    if (!searchBar) return
+
+    searchBar.addEventListener("input", event => {
+        const value = event.target.value
+
+        const newFilter = activeFilter
+        if (value && value.length > 0) {
+            newFilter.filters["name"] = {
+                execute: filters.filterBy.name,
+                argument: value
+            }
+        } else {
+            delete newFilter.filters?.["name"]
+            setFilter(newFilter)
+        }
+        setFilter(newFilter)
+    })
+}
+
+const filters = {
+    filterBy: {
+        "extension": (file, allowedExtensions) => allowedExtensions.contains(extractFileExtension(file.name)),
+        "name": (file, allowedName) => file.name.includes(allowedName)
+    },
+    sortBy: {
+        "modDate": (a, b) => a.type == "directory" ? b.type == "directory" ? 0 : -1 : b.type == "directory" ? 1 : a.modTime > b.modTime ? -1 : 1,
+        "name": (a, b) => a.name.localeCompare(b.name)
+    },
+    groupBy: {
+        "extension": files => {
+            const groups = {}
+            files.forEach(file => {
+                const extension = file.type == "directory" ? ".dir" : extractFileExtension(file.name)
+                groups[extension] = [...groups[extension], file]
+            })
+            return groups
+        }
     }
+}
+
+const compileFilter = ({
+    filters,
+    sorters,
+    grouper
+}) => contents => {
+
+    for (let filterName in filters) {
+        const filter = filters[filterName]
+        contents = contents.filter(item => filter.execute(item, filter.argument))
+    }
+
+    for (let sorterName in sorters) {
+        const sorter = sorters[sorterName]
+        contents = contents.sort(sorter.execute)
+    }
+
+    if (grouper) {
+        return grouper.execute(contents)
+    } else {
+        return {
+            ".": contents
+        }
+    }
+}
+
+const setFilter = filter => {
+    activeFilter = filter;
+    createEntries(cachedData)
+}
+
+let cachedData = {}
+let activeFilter = {
+    filters: {},
+    sorters: {},
+    grouper: null
 }
 
 const setupFiles = () => {
@@ -199,8 +284,14 @@ const setupFiles = () => {
         redirect: "follow"
     })
         .then(response => response.json())
-        .then(data => createEntries(data))
+        .then(data => {
+            cachedData = data.contents
+            createEntries(data.contents)
+        })
         .catch(error => console.error(error))
 }
 
-window.onload = () => setupFiles();
+window.onload = () => {
+    setupFiles()
+    setupSearchBar()
+};
