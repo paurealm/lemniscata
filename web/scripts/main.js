@@ -1,7 +1,7 @@
 const HALLOWEEN_THEME_DATA = {
     from: "01/10",
     to: "02/11",
-    css: "css/event/halloween.css"
+    css: "https://lemniscata.net/css/event/halloween.css"
 }
 
 const appendCssFile = url => {
