@@ -118,7 +118,8 @@ const listFile = fileData => {
     const fileContainer = document.getElementById("file-list")
     if (!fileContainer) return;
 
-    const link = `https://static.lemniscata.net/${fileData.name}`
+    const subfolder = new URLSearchParams(location.search).get("subfolder")
+    const link = `https://static.lemniscata.net/${subfolder ? subfolder + "/" : ""}${fileData.name}`
 
     const fileEntry = document.createElement("a");
     fileEntry.className = "file-entry"
