@@ -7,7 +7,7 @@ const formatEmojis = emojiString => {
 }
 
 const HALLOWEEN_THEME_DATA = {
-    from: "01/10",
+    from: "30/10",
     to: "02/11",
     css: "https://lemniscata.net/css/event/halloween.css",
     emojis: formatEmojis("🎃👻🍬🦇💀🧡🕸️🪦🧟🐈‍⬛🕯️🔮🌙"),
