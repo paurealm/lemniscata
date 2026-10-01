@@ -1,9 +1,42 @@
 const CLOSED_LEMNISCATA_PATH = "M 0 0 C 10 -20 40 -20 40 0 C 40 20 10 20 0 0 C -10 -20 -40 -20 -40 0 C -40 20 -10 20 0 0"
 const OPEN_LEMNISCATA_PATH = "M 2 -2 C 19 -19 40 -20 40 0 C 40 20 10 20 0 0 C -10 -20 -40 -20 -40 0 C -38 19 -21 20 -2 2";
 
+let currentPlaylist = undefined
+let currentIndex = -1
+
+const playIndex = (index, autoplay) => {
+    const audio = currentPlaylist.audios[index]
+
+    MUSIC_PLAYER.setPlayingAudio(audio.url)
+    MUSIC_PLAYER.setPause(!autoplay);
+    updatePlayButton()
+
+    const descriptionElement = document.getElementById("page-audio-title");
+    if (descriptionElement) {
+        descriptionElement.innerHTML = `${audio.name} - ${audio.artists.join(" - ")}`
+    }
+
+    currentIndex = index;
+}
+
+const playNextSong = () => {
+    currentIndex++;
+    if (currentIndex >= currentPlaylist.audios.length) {
+        currentIndex = 0;
+    }
+
+    playIndex(currentIndex)
+    MUSIC_PLAYER.setPause(false)
+    updatePlayButton()
+}
+
 const setupPlaylist = playlist => {
-    const titleElement = document.getElementById("page-audio-title");
-    const descriptionElement = document.getElementById("page-audio-description");
+    if (!playlist.audios || playlist.audios.length == 0) return;
+
+    currentPlaylist = playlist;
+
+    const titleElement = document.getElementById("page-audio-description");
+    const descriptionElement = document.getElementById("page-audio-title");
 
     if (titleElement && descriptionElement) {
         titleElement.innerHTML = playlist.name;
@@ -26,14 +59,17 @@ const setupPlaylist = playlist => {
 
     const audioList = document.getElementById("audio-list")
     audioList.innerHTML = ""
-    for (let audio of playlist.audios) {
+
+    for (let i = 0; i < playlist.audios.length; i++) {
+        const audio = playlist.audios[i];
+
         const audioElement = document.createElement("div");
         audioElement.className = "audio-element";
         audioList.appendChild(audioElement);
 
         const imageElement = document.createElement("img")
         imageElement.setAttribute("height", "100%");
-        imageElement.setAttribute("src", audio.image);
+        imageElement.setAttribute("src", audio.image && audio.image != "" ? audio.image : playlist.fallbackImage);
         audioElement.appendChild(imageElement);
 
         const dataElement = document.createElement("div");
@@ -53,14 +89,11 @@ const setupPlaylist = playlist => {
         dataElement.appendChild(audioDescriptionElement);
 
         audioElement.addEventListener("click", () => {
-            MUSIC_PLAYER.setPlayingAudio(audio.url)
-            MUSIC_PLAYER.setPause(false);
-            updatePlayButton()
-
-            descriptionElement.innerHTML = `${audio.name} - ${audio.artists.join(" - ")}`
+            playIndex(i, true)
         })
-
     }
+    
+    playIndex(0, false)
 
 }
 
@@ -91,16 +124,17 @@ const MUSIC_PLAYER = {
         audio.volume = MUSIC_PLAYER.volume;
 
         audio.addEventListener("ended", () => {
-            if (MUSIC_PLAYER.shouldLoop()) {
             MUSIC_PLAYER.loops++;
+
+            if (MUSIC_PLAYER.shouldLoop()) {
                 audio.load()
                 audio.play()
             } else {
                 audio.pause();
                 updatePlayButton();
+                playNextSong();
             }
         })
-        MUSIC_PLAYER.loops = 0;
 
         if (MUSIC_PLAYER.audio) {
             MUSIC_PLAYER.audio.pause()
@@ -263,7 +297,6 @@ const setupLoopButton = () => {
 
     const updateProgressBarVisual = () => {
         for (let path of document.getElementsByClassName("progress-bar-path")) {
-            console.log(path)
             if (loopButton.hasAttribute("enabled")) {
                 path.setAttribute("d", CLOSED_LEMNISCATA_PATH)
             } else {
@@ -390,11 +423,24 @@ const setupRewindButton = () => {
 }
 
 const setupPlaylists = async () => {
-    const response = await fetch("https://lemniscata.net/resources/data/playlists.json")
+    const response = await fetch("https://static.lemniscata.net/audioteca/playlists.json")
     const data = await response.json()
+
+    for (let playlistId in data.playlists) {
+        const playlist = data.playlists[playlistId]
+        if (typeof playlist == "string") {
+            try {
+                const playlistResponse = await fetch(playlist)
+                data.playlists[playlistId] = await playlistResponse.json()
+            } catch (e) {
+                console.error(`Unable to load playlist ${playlistId} from "${playlist}"`)
+            }
+
+        }
+    }
+
     const playlistContainer = document.getElementById("playlist-container")
 
-    console.log(data)
     let listSelected = false;
     for (let playlistKey in data.playlists) {
         const list = data.playlists[playlistKey]

@@ -38,9 +38,9 @@
 .player-control svg {
     margin: 5px;
     filter:
-    drop-shadow(0 0 3px var(--music-color-primary-dark))
-    drop-shadow(0 0 8px var(--music-color-detail))
-    drop-shadow(0 0 20px var(--music-color-primary-dark));
+        drop-shadow(0 0 3px var(--music-color-primary-dark))
+        drop-shadow(0 0 8px var(--music-color-detail))
+        drop-shadow(0 0 20px var(--music-color-primary-dark));
 }
 
 .player-control svg path {
@@ -63,9 +63,15 @@
     stroke-width: 3;
 }
 
+.player-control svg:has(#loop-icon[enabled]) {
+        filter:
+        drop-shadow(0 0 3px var(--music-color-secondary-dark))
+        drop-shadow(0 0 8px var(--music-color-detail))
+        drop-shadow(0 0 20px var(--music-color-secondary-dark));
+}
+
 #loop-icon[enabled] path {
-    fill: var(--music-color-secondary-light);
-    opacity: 50%;
+    fill: color-mix(in srgb, var(--music-color-secondary-light) 50%, transparent);
     stroke-width: 3;
 }
 
