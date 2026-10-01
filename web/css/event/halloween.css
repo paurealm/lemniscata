@@ -1,20 +1,42 @@
 :root {
+    --halloween-color: rgb(204, 82, 0);
+    --halloween-filter: grayscale(1)
+        sepia(1)
+        saturate(6)
+        hue-rotate(335deg);
+    --halloween-mix: 50%;
+
     --background-color: #04000b;
 
     --container-color: #1e1e1e;
-    --border-color: #3d4566;
-    --text-color: #becbd6;
-    --accent-color: #e6b24a;
+    --border-color: #8a5612;
+    --text-color: color-mix(in srgb, var(--halloween-color), white var(--halloween-mix));
+    --accent-color: #b87218;
 
     --window-title-size: 1.25em;
     
     --rainbow-border-angle: 0deg;
 }
 
-body {
-    backdrop-filter:
-        grayscale(1)
-        sepia(1)
-        saturate(6)
-        hue-rotate(335deg);
+body:not(#news) {
+    backdrop-filter: var(--halloween-filter);
+}
+
+html:has(> #news) {
+    filter: var(--halloween-filter);
+}
+
+#image-paula, #image-photo, #image-trans, #image-earth {
+    box-shadow: 0px 0px 60px 45px rgba(184,114,24,0.25);
+}
+
+.ad-container, .widget-container {
+    border-image: conic-gradient(
+        from var(--rainbow-border-angle),
+        color-mix(in srgb, #00b7ff, var(--halloween-color) var(--halloween-mix)),
+        color-mix(in srgb, #ff728e, var(--halloween-color) var(--halloween-mix)),
+        color-mix(in srgb, #ffffff, var(--halloween-color) var(--halloween-mix)),
+        color-mix(in srgb, #ff728e, var(--halloween-color) var(--halloween-mix)),
+        color-mix(in srgb, #00b7ff, var(--halloween-color) var(--halloween-mix))
+    ) 1
 }
