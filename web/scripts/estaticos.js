@@ -166,23 +166,23 @@ const addParentDirectoryIfSubfolder = () => {
 }
 
 const listDirectory = directoryData => {
-    const link = `?subfolder=${directoryData.name}`
+    const subfolder = new URLSearchParams(location.search).get("subfolder")
+    const link = `?subfolder=${subfolder ? subfolder + "/" : ""}${directoryData.name}`
     renderDirectory(directoryData.name, link)
 }
 
 const createEntries = response => {
+    const fileContainer = document.getElementById("file-list")
+    if (!fileContainer) return;
+    fileContainer.innerHTML = ''
 
     const groups = compileFilter(activeFilter)(response)
 
-    for (let group in groups) {
-        const fileList = response.filter(entry => entry.type == "file")
-        const directoryList = response.filter(entry => entry.type == "directory")
+    for (let groupName in groups) {
+        const group = groups[groupName]
+        const fileList = group.filter(entry => entry.type == "file")
+        const directoryList = group.filter(entry => entry.type == "directory")
         
-        const fileContainer = document.getElementById("file-list")
-        if (!fileContainer) return;
-
-        fileContainer.innerHTML = ''
-
         addParentDirectoryIfSubfolder()
 
         for (let directoryData of directoryList) {
@@ -224,7 +224,7 @@ const filters = {
         "name": (file, allowedName) => file.name.includes(allowedName)
     },
     sortBy: {
-        "modDate": (a, b) => a.type == "directory" ? b.type == "directory" ? 0 : -1 : b.type == "directory" ? 1 : a.modTime > b.modTime ? -1 : 1,
+        "date": (a, b) => a.type == "directory" ? b.type == "directory" ? 0 : -1 : b.type == "directory" ? 1 : a.modTime > b.modTime ? -1 : 1,
         "name": (a, b) => a.name.localeCompare(b.name)
     },
     groupBy: {
@@ -245,23 +245,27 @@ const compileFilter = ({
     grouper
 }) => contents => {
 
-    for (let filterName in filters) {
-        const filter = filters[filterName]
-        contents = contents.filter(item => filter.execute(item, filter.argument))
-    }
+    const groups = grouper ? grouper(contents) : {".": contents}
+    console.log(groups)
 
-    for (let sorterName in sorters) {
-        const sorter = sorters[sorterName]
-        contents = contents.sort(sorter.execute)
-    }
+    for (let groupName in groups) {
+        let groupContent = groups[groupName];
 
-    if (grouper) {
-        return grouper.execute(contents)
-    } else {
-        return {
-            ".": contents
+        for (let filterName in filters) {
+            const filter = filters[filterName]
+            groupContent = groupContent.filter(item => filter.execute(item, filter.argument))
         }
+
+        for (let sorterName in sorters) {
+            const sorter = sorters[sorterName]
+            groupContent = groupContent.sort((a, b) => sorter(a, b))
+        }
+
+        groups[groupName] = groupContent
     }
+
+    return groups;
+    
 }
 
 const setFilter = filter => {
@@ -270,10 +274,17 @@ const setFilter = filter => {
 }
 
 let cachedData = {}
-let activeFilter = {
+const defaultFilter = {
     filters: {},
-    sorters: {},
+    sorters: {
+        "name": filters.sortBy.name
+    },
     grouper: null
+}
+let activeFilter = {
+    filters: {...defaultFilter.filters},
+    sorters: {...defaultFilter.sorters},
+    grouper: defaultFilter.grouper
 }
 
 const setupFiles = () => {
@@ -291,7 +302,45 @@ const setupFiles = () => {
         .catch(error => console.error(error))
 }
 
+const setupFilterButtons = () => {
+    const clearFiltersButton = document.getElementById("clear-filters-button")
+    if (clearFiltersButton) {
+        clearFiltersButton.addEventListener("click", () => {
+            setFilter({
+                filters: {...defaultFilter.filters},
+                sorters: {...defaultFilter.sorters},
+                grouper: defaultFilter.grouper
+            })
+            document.getElementById("file-search-bar").value = ""
+        })
+    }
+
+    const orderByButton = document.getElementById("order-by-button")
+    if (orderByButton) {
+        orderByButton.addEventListener("click", () => {
+            const newFilter = {...activeFilter}
+            delete newFilter.sorters["name"]
+            delete newFilter.sorters["date"]
+
+            if (orderByButton.value == "name") {
+                orderByButton.value = "date"
+                orderByButton.innerHTML = "Fecha"
+            } else {
+                orderByButton.value = "name"
+                orderByButton.innerHTML = "Nombre"
+            }
+
+            const value = orderByButton.value
+
+            newFilter.sorters[value] = filters.sortBy[value]
+            setFilter(newFilter)
+
+        })
+    }
+}
+
 window.onload = () => {
     setupFiles()
     setupSearchBar()
+    setupFilterButtons()
 };

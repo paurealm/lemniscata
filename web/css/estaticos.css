@@ -25,6 +25,20 @@
     border-radius: 3px;
 }
 
+input, button {
+    display: inline-block;
+}
+
 .file-entry.directory {
     background-color: rgba(149, 153, 111, 0.521);
+}
+
+#clear-filters-button {
+    border-color: rgb(177, 26, 26);
+    background-color: rgba(202, 52, 52, 0.253);;
+    width: 5%;
+}
+
+#file-search-bar {
+    width: 30%;
 }
