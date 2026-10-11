@@ -30,19 +30,25 @@ server.get("/", (req, res) => {
 
 server.post("/requestMusicDownload", async (req, res) => {
     if (req.body && req.body.url) {
-        try {
-            musicDownloadApi.requestMusicDownload(req.body.url, (progress) => res.write(JSON.stringify(progress))).then(() => {
-                res.sendStatus(200)
-            }).catch((error) => {
-                console.error(error)
-                res.statusCode = 500
-                res.json({error: error.message})
-            })
-        } catch (e) {
-            console.error(e)
+        res.status(200);
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache, no-transform");
+        res.setHeader("Connection", "keep-alive");
+        res.flushHeaders();
+
+        musicDownloadApi.requestMusicDownload(
+            req.body.url,
+            (progress) => res.write(JSON.stringify(progress))
+        ).then(errors => {
+            res.send({errors: errors})
+        }).catch((error) => {
+            console.error(error)
             res.statusCode = 500
-            res.json({error: e.message})
-        }
+            res.json({errors: error.message})
+        }).finally(() => {
+            res.end()
+        })
+
     }
 })
 
