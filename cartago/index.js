@@ -7,6 +7,7 @@ const proxy = require('express-http-proxy')
 const path = require("path")
 const authModule = require('./auth/AuthModule')
 const { setEnvironmentData } = require("worker_threads")
+const musicDownloadApi = require("./apis/MusicDownloadApi")
 
 const server = express();
 server.use(express.json())
@@ -25,6 +26,18 @@ server.use(authModule.authModule)
 
 server.get("/", (req, res) => {
     res.send("Ya estás dentro :)")
+})
+
+server.post("/requestMusicDownload", async (req, res) => {
+    if (req.body && req.body.url) {
+        try {
+            await musicDownloadApi.requestMusicDownload(req.body.url)
+        } catch (e) {
+            console.error(e)
+            res.statusCode = 500
+            res.json({error: e.message})
+        }
+    }
 })
 
 server.use(express.static(path.join(__dirname, "/web"), {extensions: ['html']}))
