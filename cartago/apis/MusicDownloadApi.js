@@ -2,7 +2,7 @@ const { spawn } = require('node:child_process');
 
 const youtubeUrlRegex = /^https?:\/\/(?:(?:www\.|m\.)?youtube\.com|music\.youtube\.com|youtu\.be)\/.+$/i;
 
-const requestMusicDownload = url => {
+const requestMusicDownload = (url, progressCallback) => {
     if (!youtubeUrlRegex.test(url)) {
         throw new Error('Only YouTube URLs are supported for music downloads.');
     }
@@ -11,7 +11,7 @@ const requestMusicDownload = url => {
 
         const child = spawn('download-youtube', [
             'audio',
-            '-o', '/home/redstone/uwu/',
+            '-o', process.env.MUSIC_LIBRARY_PATH,
             url
         ], {
             stdio: ['ignore', 'pipe', 'pipe']
@@ -37,9 +37,11 @@ const requestMusicDownload = url => {
 
                     if (currentItem !== lastItem) {
                         lastItem = currentItem;
-                        console.log(
-                            `Descargando canción ${match[1]} de ${match[2]}`
-                        );
+
+                        progressCallback?.({
+                            currentItem: parseInt(match[1], 10),
+                            totalItems: parseInt(match[2], 10)
+                        })
                     }
                 }
             }
@@ -68,7 +70,7 @@ const requestMusicDownload = url => {
                 errors.push({
                     code,
                     signal,
-                    message: errorOutput.trim() || `Proceso terminado con código ${code}`
+                    message: errorOutput.trim() || `Process terminated with code ${code}`
                 });
             }
 

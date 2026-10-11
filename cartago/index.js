@@ -31,7 +31,13 @@ server.get("/", (req, res) => {
 server.post("/requestMusicDownload", async (req, res) => {
     if (req.body && req.body.url) {
         try {
-            await musicDownloadApi.requestMusicDownload(req.body.url)
+            musicDownloadApi.requestMusicDownload(req.body.url, (progress) => res.write(JSON.stringify(progress))).then(() => {
+                res.sendStatus(200)
+            }).catch((error) => {
+                console.error(error)
+                res.statusCode = 500
+                res.json({error: error.message})
+            })
         } catch (e) {
             console.error(e)
             res.statusCode = 500
