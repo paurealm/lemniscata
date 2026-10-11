@@ -29,6 +29,12 @@ server.get("/", (req, res) => {
 })
 
 server.post("/requestMusicDownload", async (req, res) => {
+
+    const sendEvent = (event, data) => {
+        res.write(`event: ${event}\n`);
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+    };
+
     if (req.body && req.body.url) {
         res.status(200);
         res.setHeader("Content-Type", "text/event-stream");
@@ -38,7 +44,7 @@ server.post("/requestMusicDownload", async (req, res) => {
 
         musicDownloadApi.requestMusicDownload(
             req.body.url,
-            (progress) => res.write(JSON.stringify(progress))
+            (progress) => sendEvent("progress", progress)
         ).then(errors => {
             res.send({errors: errors})
         }).catch((error) => {
