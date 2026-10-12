@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lemniscata</title>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/structure.css"/>
+        <link type="text/css" rel="stylesheet" href="https://lemniscata.net/css/forms.css"/>
+        <link type="text/css" rel="stylesheet" href="css/cartago.css"/>
+        <link type="text/css" rel="stylesheet" href="css/dj.css"/>
+    </head>
+    <body>
+        <div id="title-container">
+            <a href="https://lemniscata.net/index">
+                <div id="title-container">
+                    <img src="https://lemniscata.net/resources/media/logo.gif">
+                </div>
+            </a>
+        </div>
+        <div id="content-container">
+            <div id="left-content"></div>
+            <div id="center-content">
+                <div id="links">
+                    <a href="https://lemniscata.net/index">Inicio</a>
+                    <a href="https://lemniscata.net/museo">Museo</a>
+                    <a href="https://lemniscata.net/info">Info</a>
+                </div>
+                <div id="content-windows" style="display: block;">
+                    <div class="info-block">
+                        <h1>Zona del DJ</h1>
+                        <p>Pídele canciones chulas al DJ y podrás escucharlas en <a href="https://music.lemniscata.net">Lemniscata Music</a></p>
+                    </div>
+                    <div id="input-content">
+                        <input name="url" type="text" required placeholder="URL de Youtube o Youtube Music">
+                        <input id="submit-button" type="submit" value="Pedir música">
+                        <span id="progress-info"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="right-content"></div>
+        </div>
+
+        <script>
+            const requestDownload = async () => {
+                const infoElement = document.getElementById("progress-info");
+                infoElement.innerHTML = "Procesando URL...";
+
+                const response = await fetch("https://cartago.lemniscata.net/requestMusicDownload", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        url: document.querySelector("input[name='url']").value
+                    })
+                })
+
+                if (!response.ok) {
+                    throw new Error("Error requesting music download: " + response.statusText);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                let buffer = '';
+
+                while (true) {
+                    const { value, done } = await reader.read();
+
+                    buffer += decoder.decode(value || new Uint8Array(), {
+                        stream: !done
+                    }); 
+
+                    // SSE events are separated by double newlines
+                    const events = buffer.split('\n\n');
+                    buffer = events.pop(); // Keep the last incomplete event in the buffer
+
+                    for (const eventText  of events) {
+                        if (!eventText .trim()) continue; // Skip empty events
+                        
+                        let eventName = "message";
+                        let dataText = "";
+
+                        for (const line of eventText.split('\n')) {
+                            if (line.startsWith('event:')) {
+                                eventName = line.slice(6).trim();
+                            } else if (line.startsWith('data:')) {
+                                dataText += line.slice(5).trim();
+                            }
+                        }
+
+                        if (!dataText) continue;
+
+                        const data = JSON.parse(dataText);
+
+                        if (eventName === "progress") {
+                            infoElement.innerHTML = `Progreso: ${data.progress}/${data.total}`;
+                        } else if (eventName === "error") {
+                            console.error("Error from server:", data);
+                            infoElement.innerHTML = `Error: ${data.errors.join(', ')}`;
+                        } else if (eventName === "complete") {
+                            console.log("Download complete:", data.errors.length === 0 ? "Completado !!" : "Completado con errores:" + data.errors.join(', '));
+                        }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

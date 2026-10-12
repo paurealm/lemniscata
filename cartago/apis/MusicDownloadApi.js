@@ -1,4 +1,7 @@
 const { spawn } = require('node:child_process');
+const nanoid = require('nanoid');
+const path = require('path');
+const fs = require('fs');
 
 const youtubeUrlRegex = /^https?:\/\/(?:(?:www\.|m\.)?youtube\.com|music\.youtube\.com|youtu\.be)\/.+$/i;
 
@@ -6,12 +9,17 @@ const requestMusicDownload = (url, progressCallback) => {
     if (!youtubeUrlRegex.test(url)) {
         throw new Error('Only YouTube URLs are supported for music downloads.');
     }
-    return new Promise(resolve => {
+
+    const savePath = path.join(process.env.MUSIC_LIBRARY_PATH, nanoid.nanoid(10));
+
+    return new Promise(async (resolve) => {
+        await fs.mkdir(savePath, { recursive: true });
+
         const errors = [];
 
         const child = spawn('download-youtube', [
             'audio',
-            '-o', process.env.MUSIC_LIBRARY_PATH,
+            '-o', savePath,
             url
         ], {
             stdio: ['ignore', 'pipe', 'pipe']
@@ -39,8 +47,8 @@ const requestMusicDownload = (url, progressCallback) => {
                         lastItem = currentItem;
 
                         progressCallback?.({
-                            currentItem: parseInt(match[1], 10),
-                            totalItems: parseInt(match[2], 10)
+                            progress: parseInt(match[1], 10),
+                            total: parseInt(match[2], 10)
                         })
                     }
                 }

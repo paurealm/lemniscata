@@ -47,11 +47,10 @@ server.post("/requestMusicDownload", async (req, res) => {
             req.body.url,
             (progress) => sendEvent("progress", progress)
         ).then(errors => {
-            res.send({errors: errors})
+            sendEvent("complete", {errors: errors})
         }).catch((error) => {
             console.error(error)
-            res.statusCode = 500
-            res.json({errors: error.message})
+            sendEvent("error", {errors: error.message})
         }).finally(() => {
             res.end()
         })
