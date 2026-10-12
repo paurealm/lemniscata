@@ -33,8 +33,12 @@
                     </div>
                     <div id="input-content">
                         <input name="url" type="text" required placeholder="URL de Youtube o Youtube Music">
+                        <input id="add-to-queue-button" type="submit" value="Añadir a la cola">
                         <input id="submit-button" type="submit" value="Pedir música">
                         <span id="progress-info"></span>
+                        <div id="queue">
+                            <span class="queue-item">https://www.youtube.com/watch?v=dQw4w9WgXcQ</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,10 +46,23 @@
         </div>
 
         <script>
-            const requestDownload = async () => {
+            const addToQueueButton = document.getElementById("add-to-queue-button");
+            const queueContainer = document.getElementById("queue");
 
-                const submitButton = document.getElementById("submit-button");
-                submitButton.disabled = true;
+            addToQueueButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                const urlInput = document.querySelector("input[name='url']");
+                // can have multiple url separated by ";"
+                const urls = urlInput.value.split(";").map(url => url.trim()).filter(url => url);
+                for (const url of urls) {
+                    const queueItem = document.createElement("span");
+                    queueItem.className = "queue-item";
+                    queueItem.textContent = url;
+                    queueContainer.appendChild(queueItem);
+                }
+            });
+
+            const requestDownload = async downloadUrl => {
 
                 const infoElement = document.getElementById("progress-info");
                 infoElement.innerHTML = "Procesando URL...";
@@ -56,7 +73,7 @@
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        url: document.querySelector("input[name='url']").value
+                        url: downloadUrl
                     })
                 })
 
@@ -114,7 +131,6 @@
                                 ? "Completado !!"
                                 : "Completado con errores: " + data.errors.join(', ');
 
-                            submitButton.disabled = false;
                         }
                     }
 
@@ -124,9 +140,34 @@
                 }
             }
 
-            document.getElementById("submit-button").addEventListener("click", (event) => {
+            const submitButton = document.getElementById("submit-button");
+            submitButton.addEventListener("click", async (event) => {
                 if (event.target.disabled) return; // Prevent multiple clicks
+                submitButton.disabled = true;
                 event.preventDefault();
+
+                while (true) {
+                    // get the first queue item
+                    const firstQueueItem = queueContainer.querySelector(".queue-item");
+                    if (!firstQueueItem) {
+                        submitButton.disabled = false;
+                        break;
+                    }
+
+                    const downloadUrl = firstQueueItem.textContent.trim();
+                    try {
+                        await requestDownload(downloadUrl);
+                    } catch (error) {
+                        console.error("Error during download request:", error);
+                        document.getElementById("progress-info").innerHTML = "Error: " + error.message;
+                        break; // Stop processing further if there's an error
+                    }
+
+                    // Remove the processed item from the queue
+                    firstQueueItem.remove();
+                
+                }
+
                 requestDownload().catch(error => {
                     console.error("Error during download request:", error);
                     document.getElementById("progress-info").innerHTML = "Error: " + error.message;
