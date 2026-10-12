@@ -50,6 +50,8 @@ const requestMusicDownload = (url, progressCallback) => {
                             progress: parseInt(match[1], 10),
                             total: parseInt(match[2], 10)
                         })
+
+                        console.log(`Downloading item ${currentItem}`);
                     }
                 }
             }
