@@ -74,15 +74,14 @@
 
                     buffer += decoder.decode(value || new Uint8Array(), {
                         stream: !done
-                    }); 
+                    });
 
-                    // SSE events are separated by double newlines
                     const events = buffer.split('\n\n');
-                    buffer = events.pop(); // Keep the last incomplete event in the buffer
+                    buffer = events.pop() ?? '';
 
-                    for (const eventText  of events) {
-                        if (!eventText .trim()) continue; // Skip empty events
-                        
+                    for (const eventText of events) {
+                        if (!eventText.trim()) continue;
+
                         let eventName = "message";
                         let dataText = "";
 
@@ -99,15 +98,28 @@
                         const data = JSON.parse(dataText);
 
                         if (eventName === "progress") {
-                            infoElement.innerHTML = `Progreso: ${data.progress}/${data.total}`;
+                            infoElement.textContent = `Progreso: ${data.progress}/${data.total}`;
                         } else if (eventName === "error") {
                             console.error("Error from server:", data);
-                            infoElement.innerHTML = `Error: ${data.errors.join(', ')}`;
+                            infoElement.textContent = `Error: ${data.errors.join(', ')}`;
                         } else if (eventName === "complete") {
-                            console.log("Download complete:", data.errors.length === 0 ? "Completado !!" : "Completado con errores:" + data.errors.join(', '));
-                            infoElement.innerHTML = data.errors.length === 0 ? "Completado !!" : "Completado con errores: " + data.errors.join(', ');
+                            console.log(
+                                "Download complete:",
+                                data.errors.length === 0
+                                    ? "Completado !!"
+                                    : "Completado con errores: " + data.errors.join(', ')
+                            );
+
+                            infoElement.textContent = data.errors.length === 0
+                                ? "Completado !!"
+                                : "Completado con errores: " + data.errors.join(', ');
+
                             submitButton.disabled = false;
                         }
+                    }
+
+                    if (done) {
+                        break;
                     }
                 }
             }
