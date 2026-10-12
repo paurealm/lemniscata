@@ -47,7 +47,6 @@ const authModule = async (req, res, next) => {
             res.sendFile(path.join(__dirname, '/login.html'))
             return;
         } else if (req.method === "POST") {
-            console.log(req.body.username, req.body.password, req.body.otp)
             if (await checkUser(req.body.username, req.body.password, req.body.otp)) {
                 const token = createSession(req.body.username)
                 
