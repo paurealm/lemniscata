@@ -15,7 +15,7 @@ const requestMusicDownload = (url, progressCallback) => {
     console.log(`Saving music to path: ${savePath}`);
 
     return new Promise(async (resolve) => {
-        await fs.mkdir(savePath, { recursive: true });
+        await fs.mkdirSync(savePath, { recursive: true });
         console.log(`Created directory: ${savePath}`);
 
         const errors = [];
