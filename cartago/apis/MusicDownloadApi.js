@@ -6,14 +6,17 @@ const fs = require('fs');
 const youtubeUrlRegex = /^https?:\/\/(?:(?:www\.|m\.)?youtube\.com|music\.youtube\.com|youtu\.be)\/.+$/i;
 
 const requestMusicDownload = (url, progressCallback) => {
+    console.log(`Requesting music download for URL: ${url}`);
     if (!youtubeUrlRegex.test(url)) {
         throw new Error('Only YouTube URLs are supported for music downloads.');
     }
 
     const savePath = path.join(process.env.MUSIC_LIBRARY_PATH, nanoid.nanoid(10));
+    console.log(`Saving music to path: ${savePath}`);
 
     return new Promise(async (resolve) => {
         await fs.mkdir(savePath, { recursive: true });
+        console.log(`Created directory: ${savePath}`);
 
         const errors = [];
 
@@ -24,6 +27,8 @@ const requestMusicDownload = (url, progressCallback) => {
         ], {
             stdio: ['ignore', 'pipe', 'pipe']
         });
+
+        console.log(`Spawned child process with PID: ${child.pid}`);
 
         let output = '';
         let errorOutput = '';
