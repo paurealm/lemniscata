@@ -43,6 +43,10 @@
 
         <script>
             const requestDownload = async () => {
+
+                const submitButton = document.getElementById("submit-button");
+                submitButton.disabled = true;
+
                 const infoElement = document.getElementById("progress-info");
                 infoElement.innerHTML = "Procesando URL...";
 
@@ -101,10 +105,21 @@
                             infoElement.innerHTML = `Error: ${data.errors.join(', ')}`;
                         } else if (eventName === "complete") {
                             console.log("Download complete:", data.errors.length === 0 ? "Completado !!" : "Completado con errores:" + data.errors.join(', '));
+                            infoElement.innerHTML = data.errors.length === 0 ? "Completado !!" : "Completado con errores: " + data.errors.join(', ');
+                            submitButton.disabled = false;
                         }
                     }
                 }
             }
+
+            document.getElementById("submit-button").addEventListener("click", (event) => {
+                if (event.target.disabled) return; // Prevent multiple clicks
+                event.preventDefault();
+                requestDownload().catch(error => {
+                    console.error("Error during download request:", error);
+                    document.getElementById("progress-info").innerHTML = "Error: " + error.message;
+                });
+            });
         </script>
     </body>
 </html>

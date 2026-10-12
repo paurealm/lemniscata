@@ -30,16 +30,12 @@ server.get("/", (req, res) => {
 
 server.post("/requestMusicDownload", async (req, res) => {
 
-    console.log(`Received music download request for URL: ${req.body.url}`);
-
     const sendEvent = (event, data) => {
-        console.log(`Sending event: ${event} with data: ${JSON.stringify(data)}`);
         res.write(`event: ${event}\n`);
         res.write(`data: ${JSON.stringify(data)}\n\n`);
     };
 
     if (req.body && req.body.url) {
-        console.log(`Starting music download for URL: ${req.body.url}`);
         res.status(200);
         res.setHeader("Content-Type", "text/event-stream");
         res.setHeader("Cache-Control", "no-cache, no-transform");
@@ -47,19 +43,16 @@ server.post("/requestMusicDownload", async (req, res) => {
         res.setHeader("X-Accel-Buffering", "no");
         res.flushHeaders();
 
-        console.log(`Headers set for streaming response. Beginning download process.`);
 
         musicDownloadApi.requestMusicDownload(
             req.body.url,
             (progress) => sendEvent("progress", progress)
         ).then(errors => {
-            console.log("Download completed with errors:", errors)
             sendEvent("complete", {errors: errors})
         }).catch((error) => {
             console.error("Error:", error)
             sendEvent("error", {errors: error.message})
         }).finally(() => {
-            console.log("Closing connection.")
             res.end()
         })
 
