@@ -3,8 +3,6 @@ const mailUtils = require("../utils/MailUtils")
 
 let notes = []
 
-CRYPTED_LIBRARY_LOG
-
 const setupApi = () => {
     fs.readFile(
         process.env.LEMNISCATA_API_NOTES_FILE,
