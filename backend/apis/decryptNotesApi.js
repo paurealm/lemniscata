@@ -3,6 +3,8 @@ const mailUtils = require("../utils/MailUtils")
 
 let notes = []
 
+CRYPTED_LIBRARY_LOG
+
 const setupApi = () => {
     fs.readFile(
         process.env.LEMNISCATA_API_NOTES_FILE,
@@ -28,6 +30,18 @@ const decrypt = (id, key) => {
         }
     }
 
+    const now = new Date();
+    const date = `[${new Intl.DateTimeFormat('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hourCycle: 'h23',
+        timeZone: 'Europe/Madrid'
+    }).format(now)}]`;
+
     if (matchingNote) {
         if (matchingNote.keys.includes(key.trim().toLowerCase())) {
             const mailText = `Parece que alguien ha desencriptado el mensaje para ${id} con la clave ${key}`
@@ -38,6 +52,9 @@ const decrypt = (id, key) => {
                 text: mailText,
                 html: `<p>${mailText}</p>`, // HTML body
             })
+            
+
+            fs.appendFileSync(process.env.CRYPTED_LIBRARY_LOG, `${date} ${mailText}\n`);
             return matchingNote.text;
         }
     }
@@ -50,6 +67,8 @@ const decrypt = (id, key) => {
                 text: mailText,
                 html: `<p>${mailText}</p>`, // HTML body
             })
+
+    fs.appendFileSync(process.env.CRYPTED_LIBRARY_LOG, `${date} ${mailText}\n`);
     return null;
 }
 
