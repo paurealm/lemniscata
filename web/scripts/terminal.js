@@ -245,7 +245,7 @@ const SEND_MESSAGE_MENU = {
     ],
     onShow: () => setWallpaperColor(COLORS.BLUE),
     onEnter: () => {
-        const inputText = document.getElementById("terminal-input").innerHTML.trim().replaceAll("<br>", "\n")
+        const inputText = document.getElementById("terminal-input").innerHTML.replaceAll("<br>", "").replaceAll("\n", "").trim()
         if (inputText.length > 0) {
             
             playSound(SFX.SEND_MESSAGE_CONFIRMATION)
