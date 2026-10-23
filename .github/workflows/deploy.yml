@@ -22,4 +22,4 @@ jobs:
           DEPLOY_USER: ${{secrets.DEPLOY_USER}}
           DEPLOY_HOST: ${{secrets.DEPLOY_HOST}}
           DEPLOY_SCRIPT: ${{secrets.DEPLOY_SCRIPT}}
-        run: ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -s" < "~/deploy_scripts/${DEPLOY_SCRIPT}"
+        run: ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "sudo ~/deploy_scripts/${DEPLOY_SCRIPT}"
