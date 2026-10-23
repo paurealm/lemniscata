@@ -15,6 +15,7 @@ jobs:
           cf-access-client-secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
           ssh-private-key:         ${{ secrets.DEPLOY_SSH_KEY }}
           ssh-host:                ${{ secrets.DEPLOY_HOST }}
+          ssh-user:                ${{ secrets.DEPLOY_USER }}
     
       - name: Deploy to server
         env:
