@@ -19,5 +19,8 @@
     "jsonwebtoken": "^9.0.3",
     "nanoid": "^5.1.15",
     "otplib": "^13.4.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["bcrypt"]
   }
 }
