@@ -1,0 +1,157 @@
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+}
+
+#scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#world {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1920px;
+    height: 1080px;
+    transform-origin: center;
+}
+
+#background-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+}
+
+#tv-stream {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#calibration {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.calibration-point {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: #e04444;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    cursor: grab;
+    pointer-events: auto;
+    touch-action: none;
+}
+
+.calibration-point:active {
+    cursor: grabbing;
+}
+
+.calibration-point::after {
+    position: absolute;
+    top: 0;
+    left: 26px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: black;
+    color: white;
+    content: attr(data-label);
+    font: 12px Arial, sans-serif;
+    white-space: nowrap;
+}
+
+#tv-projection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 1080px;
+    transform-origin: top left;
+    pointer-events: none;
+    animation: projector-flicker 5.7s infinite;
+}
+
+#tv-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.ambient-light {
+    position: absolute;
+    inset: -8%;
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 190, 115, 0.25) 0%,
+        rgba(255, 160, 85, 0.12) 45%,
+        transparent 75%
+    );
+    filter: blur(28px);
+    opacity: 0.65;
+    animation: ambient-flicker 4.3s infinite;
+}
+
+@keyframes projector-flicker {
+    0%, 12%, 14%, 32%, 34%, 67%, 100% {
+        opacity: 1;
+    }
+
+    13% {
+        opacity: 0.96;
+    }
+
+    33% {
+        opacity: 0.985;
+    }
+
+    68% {
+        opacity: 0.97;
+    }
+
+    69% {
+        opacity: 0.995;
+    }
+}
+
+@keyframes ambient-flicker {
+    0%, 100% {
+        opacity: 0.65;
+    }
+
+    35% {
+        opacity: 0.59;
+    }
+
+    36% {
+        opacity: 0.68;
+    }
+
+    72% {
+        opacity: 0.62;
+    }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lemniscata</title>
+        <link type="text/css" rel="stylesheet" href="css/fonts.css"/>
+        <link type="text/css" rel="stylesheet" href="css/main.css"/>
+        <link type="text/css" rel="stylesheet" href="css/structure.css"/>
+        <link type="text/css" rel="stylesheet" href="css/interloopertv.css"/>
+    </head>
+    <body>
+        <div id="scene">
+            <div id="world">
+                <video id="background-video" autoplay muted loop playsinline>
+                    <source src="https://static.lemniscata.net/lemniscata/timberheart_loop.mp4" type="video/mp4">
+                </video>
+
+                <video id="tv-stream" autoplay muted playsinline></video>
+
+                <div id="tv-projection">
+                    <div class="ambient-light"></div>
+                    <canvas id="tv-canvas"></canvas>
+                </div>
+                <!--<div id="calibration"></div>-->
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <script src="scripts/interlopertv.js"></script>
+        <script src="scripts/interloper_projector.js"></script>
+    </body>
+</html>
