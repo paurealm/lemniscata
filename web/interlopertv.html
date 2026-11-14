@@ -9,13 +9,17 @@
         <link type="text/css" rel="stylesheet" href="css/interloopertv.css"/>
     </head>
     <body>
+        <div id="acampar">
+            <div class="acampar-text">- Acampar -</div>
+        </div>
+
         <div id="scene">
             <div id="world">
                 <video id="background-video" autoplay muted loop playsinline>
                     <source src="https://static.lemniscata.net/lemniscata/timberheart_loop.mp4" type="video/mp4">
                 </video>
 
-                <video id="tv-stream" autoplay muted playsinline></video>
+                <video id="tv-stream" autoplay muted playsinline crossorigin="anonymous"></video>
 
                 <div id="tv-projection">
                     <div class="ambient-light"></div>
@@ -26,6 +30,7 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <script src="scripts/interloper_audio.js"></script>
         <script src="scripts/interlopertv.js"></script>
         <script src="scripts/interloper_projector.js"></script>
     </body>

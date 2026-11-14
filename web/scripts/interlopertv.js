@@ -204,7 +204,38 @@ function initializeHls() {
 
 window.addEventListener("resize", updateWorld);
 
+
+const setupCampScreen = () => {
+    const acampar = document.getElementById("acampar");
+
+    let activated = false;
+
+    async function activate() {
+        if (activated) return;
+        activated = true;
+
+        // Activate the complete audio processing chain.
+        await window.audioEffects.activate();
+
+        // Start the exit animation.
+        acampar.classList.add("leaving");
+
+        // Remove the overlay after the animation.
+        acampar.addEventListener("transitionend", event => {
+            if (event.propertyName === "transform") {
+                acampar.remove();
+            }
+        });
+    }
+
+    // Any user interaction activates the experience.
+    document.addEventListener("pointerdown", activate, { once: true });
+    document.addEventListener("keydown", activate, { once: true });
+};
+
+
 updateWorld();
 updateTVGeometry();
 updateCalibrationPoints();
 initializeHls();
+setupCampScreen();
