@@ -51,9 +51,7 @@ void main() {
     color *= vec3(1.06, 1.025, 0.94);
 
     float brightness = (color.r + color.g + color.b) / 3.0;
-    float alpha = brightness <= 0.0
-        ? 0.0
-        : mix(0.40, 0.50, smoothstep(1.0 / 255.0, 1.0, brightness));
+    float alpha = mix(0.40, 0.50, smoothstep(1.0 / 255.0, 1.0, brightness));
 
     vec2 pixelPosition = uv * uResolution;
 
