@@ -91,7 +91,6 @@ const setupEndpoints = app => {
     app.get('/tv/current/:channelId', async (req, res) => {
         try {
             const data = await currentProgram(req.params.channelId);
-
             const programName = data?.media?.title ?? data?.media?.source?.split('/').pop() ?? null;
 
             res.json(splitName(programName));
@@ -179,6 +178,42 @@ const setupEndpoints = app => {
                     }
                 ]
             })
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: error.message });
+        }
+    })
+
+    app.post('/tv/notes', async (req, res) => {
+        try {
+            const { message, author, pictureId } = req.body;
+
+            if (!message || !author || pictureId === undefined || pictureId === null) {
+                return res.status(400).send({ error: "Invalid note data" });
+            }
+
+            if (message.length > 100) {
+                return res.status(400).send({ error: "Message exceeds 100 characters" });
+            }
+
+            if (author.length > 30) {
+                return res.status(400).send({ error: "Author name exceeds 30 characters" });
+            }
+
+            const programData = await currentProgram(req.params.channelId);
+            const programName = splitName(programData?.media?.title).show ?? "";
+
+            const note = {
+                message,
+                author,
+                program: programName,
+                pictureId,
+                timestamp: new Date().toISOString()
+            }
+
+            // TODO: Save the note
+
+            res.status(201).send();
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: error.message });
