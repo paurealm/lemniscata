@@ -19,7 +19,8 @@ const login = async() => {
     if (!res.ok) throw new Error(`Login failed: ${res.status}`);
     
     const data = await res.json();
-    const token = data.user?.token ?? data.token ?? data.access_token;
+    console.log(data)
+    const token = data.access;
 
     if (!token) throw new Error('Invalid token: ' + JSON.stringify(Object.keys(data)));
 
@@ -68,6 +69,15 @@ const dailySchedule = async channelId => fetchSchedule(channelId, dayRange(0));
 
 const tomorrowSchedule = async channelId => fetchSchedule(channelId, dayRange(1));
 
+const splitName = name => {
+    const parts = name.split(':');
+    if (parts.length < 2) return { show: name.trim(), episode: null };
+
+    const show = parts.shift().trim();
+    const episode = parts.join(':').trim();
+    return { show, episode };
+};
+
 const nextProgram = async channelId => {
     const now = Date.now();
     const upcoming = (items) => items.find((item) => startOf(item) > now);
@@ -81,7 +91,10 @@ const setupEndpoints = app => {
     app.get('/tv/current/:channelId', async (req, res) => {
         try {
             const data = await currentProgram(req.params.channelId);
-            res.json(data);
+
+            const programName = data?.media?.title ?? data?.media?.source?.split('/').pop() ?? null;
+
+            res.json(splitName(programName));
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: error.message });
@@ -91,7 +104,10 @@ const setupEndpoints = app => {
     app.get('/tv/next/:channelId', async (req, res) => {
         try {
             const data = await nextProgram(req.params.channelId);
-            res.json(data);
+
+            const programName = data?.title ?? data?.source?.split('/').pop() ?? null;
+
+            res.json({ ...splitName(programName), startTime: data?.start });
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: error.message });
@@ -101,7 +117,18 @@ const setupEndpoints = app => {
     app.get('/tv/schedule/:channelId', async (req, res) => {
         try {
             const data = await dailySchedule(req.params.channelId);
-            res.json(data);
+
+            console.log(data)
+
+            const formattedData = data.map(item => {
+                return {
+                    ...splitName(item.title ?? item.source?.split('/').pop() ?? null),
+                    startTime: item.start,
+                    duration: item.duration,
+                }
+            })
+
+            res.json(formattedData);
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: error.message });
@@ -111,12 +138,52 @@ const setupEndpoints = app => {
     app.get('/tv/schedule/:channelId/tomorrow', async (req, res) => {
         try {
             const data = await tomorrowSchedule(req.params.channelId);
-            res.json(data);
+
+            const formattedData = data.map(item => {
+                return {
+                    ...splitName(item.title ?? item.source?.split('/').pop() ?? null),
+                    startTime: item.start,
+                    duration: item.duration,
+                }
+            })
+
+            res.json(formattedData);
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: error.message });
         }
     });
+
+    app.get('/tv/notes', async (req, res) => {
+        try {
+            // mock
+            return res.json({
+                notes: [
+                    { 
+                        message: "Pese a lo que digan por ahí, Agallas no es tan cobarde como se cuenta. Saludos desde Francia :P",
+                        author: "Feldespato",
+                        program: "Agallas, el perro cobarde",
+                        pictureId: 2
+                    },
+                    {
+                        message: "HOLA PROBANDO",
+                        author: "Esker",
+                        program: "iCarly",
+                        pictureId: 0
+                    },
+                    {
+                        message: "Han draducido tech freak como friki técnico XD",
+                        author: "Launa",
+                        program: "iCarly",
+                        pictureId: 1
+                    }
+                ]
+            })
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: error.message });
+        }
+    })
 }
 
 module.exports = {
