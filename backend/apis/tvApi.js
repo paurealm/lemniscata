@@ -162,21 +162,24 @@ const setupEndpoints = app => {
                         message: "Pese a lo que digan por ahí, Agallas no es tan cobarde como se cuenta. Saludos desde Francia :P",
                         author: "Feldespato",
                         program: "Agallas, el perro cobarde",
-                        pictureId: 2,
+                        avatarResource: "outer_wilds/0",
+                        backgroundResource: "outer_wilds/0",
                         timeDistance: 0,
                     },
                     {
                         message: "HOLA PROBANDO",
                         author: "Esker",
                         program: "iCarly",
-                        pictureId: 0,
+                        avatarResource: "outer_wilds/0",
+                        backgroundResource: "outer_wilds/0",
                         timeDistance: 1
                     },
                     {
                         message: "Han draducido tech freak como friki técnico XD",
                         author: "Launa",
                         program: "iCarly",
-                        pictureId: 1,
+                        avatarResource: "outer_wilds/0",
+                        backgroundResource: "outer_wilds/0",
                         timeDistance: 2
                     }
                 ]
