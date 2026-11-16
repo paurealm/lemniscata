@@ -162,19 +162,22 @@ const setupEndpoints = app => {
                         message: "Pese a lo que digan por ahí, Agallas no es tan cobarde como se cuenta. Saludos desde Francia :P",
                         author: "Feldespato",
                         program: "Agallas, el perro cobarde",
-                        pictureId: 2
+                        pictureId: 2,
+                        timeDistance: 0,
                     },
                     {
                         message: "HOLA PROBANDO",
                         author: "Esker",
                         program: "iCarly",
-                        pictureId: 0
+                        pictureId: 0,
+                        timeDistance: 1
                     },
                     {
                         message: "Han draducido tech freak como friki técnico XD",
                         author: "Launa",
                         program: "iCarly",
-                        pictureId: 1
+                        pictureId: 1,
+                        timeDistance: 2
                     }
                 ]
             })
@@ -186,9 +189,9 @@ const setupEndpoints = app => {
 
     app.post('/tv/notes', async (req, res) => {
         try {
-            const { message, author, pictureId } = req.body;
+            const { message, author, avatarResource, backgroundResource, channel } = req.body;
 
-            if (!message || !author || pictureId === undefined || pictureId === null) {
+            if (!message || !author || !avatarResource || !backgroundResource || !channel) {
                 return res.status(400).send({ error: "Invalid note data" });
             }
 
@@ -196,20 +199,23 @@ const setupEndpoints = app => {
                 return res.status(400).send({ error: "Message exceeds 100 characters" });
             }
 
-            if (author.length > 30) {
-                return res.status(400).send({ error: "Author name exceeds 30 characters" });
+            if (author.length > 20) {
+                return res.status(400).send({ error: "Author name exceeds 20 characters" });
             }
 
-            const programData = await currentProgram(req.params.channelId);
+            const programData = await currentProgram(channel);
             const programName = splitName(programData?.media?.title).show ?? "";
 
             const note = {
                 message,
                 author,
                 program: programName,
-                pictureId,
+                avatarResource,
+                backgroundResource,
                 timestamp: new Date().toISOString()
             }
+            
+            console.log(note)
 
             // TODO: Save the note
 
