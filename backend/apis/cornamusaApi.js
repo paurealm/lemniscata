@@ -25,16 +25,11 @@ const locateFileByCode = async (code, onError, onNotFound) => {
 }
 
 const checkTotpCode = async (code) => {
-    return {
-        valid: true
-    }
-    /*
     return await otplib.verify({
         secret: process.env.CORNAMUSA_SECRET,
         token: code,
         epochTolerance: 90
     })
-        */
 }
 
 const setupEndpoints = app => {
